@@ -9,6 +9,10 @@ public class PlayerInputAdvanced : MonoBehaviour
 
     [SerializeField] private GameObject directionButtons;
 
+    [NonSerialized] public int steps = 0;
+
+    private bool rolledDice = false;
+
     private void Start()
     {
         gamePiece = GetComponent<GamePiece>();
@@ -16,7 +20,15 @@ public class PlayerInputAdvanced : MonoBehaviour
 
     private void Update()
     {
-        // Keyboard movement
+        // Keyboard movement (doesn't use the steps variable and the coroutine)
+        // UpdateKeyboardMovement();
+
+        // Dice movement
+        UpdateDiceMovement();
+    }
+
+    private void UpdateKeyboardMovement()
+    {
         if (!gamePiece.isMoving && gamePiece.currentNode != null)
         {
             if (gamePiece.currentNode.NeighborsCount().Count == 1)
@@ -31,8 +43,44 @@ public class PlayerInputAdvanced : MonoBehaviour
                 directionButtons.SetActive(true);
             }
         }
+    }
 
-        // Dice movement
+    private void UpdateDiceMovement()
+    {
+        if (Input.GetKeyDown(KeyCode.E) && !rolledDice && gamePiece.currentNode != null)
+        {
+            steps = UnityEngine.Random.Range(1, 7);
+            rolledDice = true;
+            Debug.Log($"Dice roll: {steps}");
+
+            StartCoroutine(DiceMovement());
+        }
+    }
+
+    public IEnumerator DiceMovement()
+    {
+        yield return new WaitForSeconds(0.5f);
+        
+        if (gamePiece.isMoving)
+        {
+            yield break;
+        }
+
+        while (steps > 0 && gamePiece.currentNode.NeighborsCount().Count == 1)
+        {
+            MoveToNode(gamePiece.currentNode.NeighborsCount()[0]);
+
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        if (steps != 0)
+        {
+            directionButtons.SetActive(true);
+        }
+        else
+        {
+            rolledDice = false;
+        }
     }
 
     public void MoveToNode(MapNode node)
@@ -40,6 +88,8 @@ public class PlayerInputAdvanced : MonoBehaviour
         if (node != null)
         {
             gamePiece.currentNode = node;
+            steps--;
+            Debug.Log($"Remaining steps: {steps}");
         }
     }
 }

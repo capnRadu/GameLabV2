@@ -14,12 +14,14 @@ public class DirectionButtons : MonoBehaviour
     public void GoLeft()
     {
         playerInputAdvanced.MoveToNode(playerInputAdvanced.gamePiece.currentNode.leftNeighbor);
+        playerInputAdvanced.StartCoroutine(playerInputAdvanced.DiceMovement());
         gameObject.SetActive(false);
     }
 
     public void GoRight()
     {
         playerInputAdvanced.MoveToNode(playerInputAdvanced.gamePiece.currentNode.rightNeighbor);
+        playerInputAdvanced.StartCoroutine(playerInputAdvanced.DiceMovement());
         gameObject.SetActive(false);
     }
 }
