@@ -11,16 +11,18 @@ public class DirectionButtons : MonoBehaviour
         playerInputAdvanced = GameObject.FindWithTag("Player").GetComponent<PlayerInputAdvanced>();
     }
 
-    public void GoLeft()
+    public void Bifurcation(string direction)
     {
-        playerInputAdvanced.MoveToNode(playerInputAdvanced.gamePiece.currentNode.leftNeighbor);
-        playerInputAdvanced.StartCoroutine(playerInputAdvanced.DiceMovement());
-        gameObject.SetActive(false);
-    }
+        switch (direction)
+        {
+            case "left":
+                playerInputAdvanced.MoveToNode(playerInputAdvanced.gamePiece.currentNode.leftNeighbor);
+                break;
+            case "right":
+                playerInputAdvanced.MoveToNode(playerInputAdvanced.gamePiece.currentNode.rightNeighbor);
+                break;
+        }
 
-    public void GoRight()
-    {
-        playerInputAdvanced.MoveToNode(playerInputAdvanced.gamePiece.currentNode.rightNeighbor);
         playerInputAdvanced.StartCoroutine(playerInputAdvanced.DiceMovement());
         gameObject.SetActive(false);
     }

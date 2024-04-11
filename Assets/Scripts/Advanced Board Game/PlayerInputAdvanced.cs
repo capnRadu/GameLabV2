@@ -9,8 +9,7 @@ public class PlayerInputAdvanced : MonoBehaviour
 
     [SerializeField] private GameObject directionButtons;
 
-    [NonSerialized] public int steps = 0;
-
+    private int steps = 0;
     private bool rolledDice = false;
 
     private void Start()
