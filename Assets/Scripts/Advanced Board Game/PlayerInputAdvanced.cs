@@ -21,6 +21,9 @@ public class PlayerInputAdvanced : MonoBehaviour
     [NonSerialized] public int defaultCameraFov = 60;
     private int bifurcationCameraFov = 80;
 
+    private int coins = 0;
+    [SerializeField] private TextMeshProUGUI coinsText;
+
     private void Start()
     {
         gamePiece = GetComponent<GamePiece>();
@@ -129,6 +132,7 @@ public class PlayerInputAdvanced : MonoBehaviour
         {
             rolledDice = false;
             diceRollText.gameObject.SetActive(false);
+            CheckTile();
         }
     }
 
@@ -155,5 +159,20 @@ public class PlayerInputAdvanced : MonoBehaviour
         }
 
         Camera.main.fieldOfView = targetFov;
+    }
+
+    private void CheckTile()
+    {
+        if (gamePiece.currentNode.tag == "BlueTile")
+        {
+            coins += 3;
+        }
+        else if (gamePiece.currentNode.tag == "RedTile")
+        {
+            coins -= 3;
+        }
+
+        coins = Mathf.Clamp(coins, 0, 1000000);
+        coinsText.text = coins.ToString();
     }
 }
