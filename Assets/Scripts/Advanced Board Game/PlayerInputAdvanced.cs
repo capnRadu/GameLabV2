@@ -7,7 +7,10 @@ public class PlayerInputAdvanced : MonoBehaviour
 {
     [NonSerialized] public GamePiece gamePiece;
 
-    [SerializeField] private GameObject directionButtons;
+    [SerializeField] private GameObject upDirectionButton;
+    [SerializeField] private GameObject downDirectionButton;
+    [SerializeField] private GameObject leftDirectionButton;
+    [SerializeField] private GameObject rightDirectionButton;
 
     private int steps = 0;
     private bool rolledDice = false;
@@ -39,7 +42,22 @@ public class PlayerInputAdvanced : MonoBehaviour
             }
             else
             {
-                directionButtons.SetActive(true);
+                if (gamePiece.currentNode.upNeighbor != null)
+                {
+                    upDirectionButton.SetActive(true);
+                }
+                if (gamePiece.currentNode.downNeighbor != null)
+                {
+                    downDirectionButton.SetActive(true);
+                }
+                if (gamePiece.currentNode.leftNeighbor != null)
+                {
+                    leftDirectionButton.SetActive(true);
+                }
+                if (gamePiece.currentNode.rightNeighbor != null)
+                {
+                    rightDirectionButton.SetActive(true);
+                }
             }
         }
     }
@@ -74,7 +92,22 @@ public class PlayerInputAdvanced : MonoBehaviour
 
         if (steps != 0)
         {
-            directionButtons.SetActive(true);
+            if (gamePiece.currentNode.upNeighbor != null)
+            {
+                upDirectionButton.SetActive(true);
+            }
+            if (gamePiece.currentNode.downNeighbor != null)
+            {
+                downDirectionButton.SetActive(true);
+            }
+            if (gamePiece.currentNode.leftNeighbor != null)
+            {
+                leftDirectionButton.SetActive(true);
+            }
+            if (gamePiece.currentNode.rightNeighbor != null)
+            {
+                rightDirectionButton.SetActive(true);
+            }
         }
         else
         {

@@ -6,6 +6,11 @@ public class DirectionButtons : MonoBehaviour
 {
     PlayerInputAdvanced playerInputAdvanced;
 
+    [SerializeField] private GameObject leftButton;
+    [SerializeField] private GameObject rightButton;
+    [SerializeField] private GameObject upButton;
+    [SerializeField] private GameObject downButton;
+
     private void Start()
     {
         playerInputAdvanced = GameObject.FindWithTag("Player").GetComponent<PlayerInputAdvanced>();
@@ -21,9 +26,18 @@ public class DirectionButtons : MonoBehaviour
             case "right":
                 playerInputAdvanced.MoveToNode(playerInputAdvanced.gamePiece.currentNode.rightNeighbor);
                 break;
+            case "up":
+                playerInputAdvanced.MoveToNode(playerInputAdvanced.gamePiece.currentNode.upNeighbor);
+                break;
+            case "down":
+                playerInputAdvanced.MoveToNode(playerInputAdvanced.gamePiece.currentNode.downNeighbor);
+                break;
         }
 
+        leftButton.SetActive(false);
+        rightButton.SetActive(false);
+        upButton.SetActive(false);
+        downButton.SetActive(false);
         playerInputAdvanced.StartCoroutine(playerInputAdvanced.DiceMovement());
-        gameObject.SetActive(false);
     }
 }
