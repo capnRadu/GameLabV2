@@ -39,7 +39,7 @@ public class DirectionButtons : MonoBehaviour
         upButton.SetActive(false);
         downButton.SetActive(false);
 
-        StartCoroutine(playerInputAdvanced.SmoothCameraFov(playerInputAdvanced.defaultCameraFov, 0.2f));
-        StartCoroutine(playerInputAdvanced.DiceMovement());
+        playerInputAdvanced.StartCoroutine(playerInputAdvanced.SmoothCameraFov(playerInputAdvanced.defaultCameraFov, 0.2f));
+        playerInputAdvanced.StartCoroutine(playerInputAdvanced.DiceMovement());
     }
 }
