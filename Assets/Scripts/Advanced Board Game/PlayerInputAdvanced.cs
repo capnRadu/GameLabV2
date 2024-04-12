@@ -18,6 +18,9 @@ public class PlayerInputAdvanced : MonoBehaviour
     [NonSerialized] public int steps = 0;
     [NonSerialized] public bool rolledDice = false;
 
+    [NonSerialized] public int defaultCameraFov = 60;
+    private int bifurcationCameraFov = 80;
+
     private void Start()
     {
         gamePiece = GetComponent<GamePiece>();
@@ -103,6 +106,8 @@ public class PlayerInputAdvanced : MonoBehaviour
 
         if (steps != 0)
         {
+            StartCoroutine(SmoothCameraFov(bifurcationCameraFov, 0.2f));
+
             if (gamePiece.currentNode.upNeighbor != null)
             {
                 upDirectionButton.SetActive(true);
@@ -135,5 +140,20 @@ public class PlayerInputAdvanced : MonoBehaviour
             steps--;
             Debug.Log($"Remaining steps: {steps}");
         }
+    }
+
+    public IEnumerator SmoothCameraFov(int targetFov, float duration)
+    {
+        float startFov = Camera.main.fieldOfView;
+        float time = 0;
+
+        while (time < duration)
+        {
+            Camera.main.fieldOfView = Mathf.Lerp(startFov, targetFov, time / duration);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        Camera.main.fieldOfView = targetFov;
     }
 }
