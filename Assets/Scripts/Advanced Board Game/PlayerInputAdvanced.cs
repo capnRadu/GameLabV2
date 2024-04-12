@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerInputAdvanced : MonoBehaviour
@@ -12,8 +13,10 @@ public class PlayerInputAdvanced : MonoBehaviour
     [SerializeField] private GameObject leftDirectionButton;
     [SerializeField] private GameObject rightDirectionButton;
 
-    private int steps = 0;
-    private bool rolledDice = false;
+    [SerializeField] private TextMeshProUGUI diceRollText;
+
+    [NonSerialized] public int steps = 0;
+    [NonSerialized] public bool rolledDice = false;
 
     private void Start()
     {
@@ -25,8 +28,8 @@ public class PlayerInputAdvanced : MonoBehaviour
         // Keyboard movement (doesn't use the steps variable and the coroutine)
         // UpdateKeyboardMovement();
 
-        // Dice movement
-        UpdateDiceMovement();
+        // Dice movement (this is used without the separate dice roll script)
+        // UpdateDiceMovement();
     }
 
     private void UpdateKeyboardMovement()
@@ -76,6 +79,13 @@ public class PlayerInputAdvanced : MonoBehaviour
 
     public IEnumerator DiceMovement()
     {
+        diceRollText.text = steps.ToString();
+
+        if (diceRollText.gameObject.activeSelf == false)
+        {
+            diceRollText.gameObject.SetActive(true);
+        }
+
         yield return new WaitForSeconds(0.5f);
         
         if (gamePiece.isMoving)
@@ -86,6 +96,7 @@ public class PlayerInputAdvanced : MonoBehaviour
         while (steps > 0 && gamePiece.currentNode.NeighborsCount().Count == 1)
         {
             MoveToNode(gamePiece.currentNode.NeighborsCount()[0]);
+            diceRollText.text = steps.ToString();
 
             yield return new WaitForSeconds(0.5f);
         }
@@ -112,6 +123,7 @@ public class PlayerInputAdvanced : MonoBehaviour
         else
         {
             rolledDice = false;
+            diceRollText.gameObject.SetActive(false);
         }
     }
 
