@@ -11,14 +11,14 @@ public class SkillAttribution : MonoBehaviour
 
     [SerializeField] private GameObject skillPrefab;
 
-    private float yPos = 120;
+    private float yPos = 40;
 
-    [NonSerialized] public int attributions = 8;
+    [NonSerialized] public int attributions = 4;
     [SerializeField] private TextMeshProUGUI attributionsText;
 
     private void Awake()
     {
-        playerSkills = GameObject.Find("Player").GetComponent<PlayerSkills>();
+        playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
     }
 
     private void Start()

@@ -11,27 +11,27 @@ public class SkillSelection : MonoBehaviour
     private bool programmingSelected = false;
     private bool designSelected = false;
     private bool financeSelected = false;
-    private bool marketingSelected = false;
-    private bool dataSelected = false;
-    private bool hrSelected = false;
+    // private bool marketingSelected = false;
+    // private bool dataSelected = false;
+    // private bool hrSelected = false;
     private bool productSelected = false;
     private bool qaSelected = false;
 
     [SerializeField] private Button programmingButton;
     [SerializeField] private Button designButton;
     [SerializeField] private Button financeButton;
-    [SerializeField] private Button marketingButton;
-    [SerializeField] private Button dataButton;
-    [SerializeField] private Button hrButton;
+    // [SerializeField] private Button marketingButton;
+    // [SerializeField] private Button dataButton;
+    // [SerializeField] private Button hrButton;
     [SerializeField] private Button productButton;
     [SerializeField] private Button qaButton;
 
-    private int selections = 4;
+    private int selections = 2;
     [SerializeField] private TextMeshProUGUI selectionsText;
 
     private void Awake()
     {
-        playerSkills = GameObject.Find("Player").GetComponent<PlayerSkills>();
+        playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
     }
 
     private void Update()
@@ -100,7 +100,7 @@ public class SkillSelection : MonoBehaviour
                 }
                 break;
 
-            case "marketing":
+            /*case "marketing":
                 if (!marketingSelected && selections > 0)
                 {
                     playerSkills.skills["Marketing"]++;
@@ -117,9 +117,9 @@ public class SkillSelection : MonoBehaviour
                     marketingButton.GetComponent<Image>().color = new Color(0.9607843f, 0.9607843f, 0.8627451f, 1f);
                     selections++;
                 }
-                break;
+                break;*/
 
-            case "data":
+            /*case "data":
                 if (!dataSelected && selections > 0)
                 {
                     playerSkills.skills["Data Analysis"]++;
@@ -136,9 +136,9 @@ public class SkillSelection : MonoBehaviour
                     dataButton.GetComponent<Image>().color = new Color(0.9607843f, 0.9607843f, 0.8627451f, 1f);
                     selections++;
                 }
-                break;
+                break;*/
 
-            case "hr":
+            /*case "hr":
                 if (!hrSelected && selections > 0)
                 {
                     playerSkills.skills["Human Resources"]++;
@@ -155,7 +155,7 @@ public class SkillSelection : MonoBehaviour
                     hrButton.GetComponent<Image>().color = new Color(0.9607843f, 0.9607843f, 0.8627451f, 1f);
                     selections++;
                 }
-                break;
+                break;*/
 
             case "product":
                 if (!productSelected && selections > 0)

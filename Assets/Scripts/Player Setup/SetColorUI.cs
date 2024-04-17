@@ -9,7 +9,7 @@ public class SetColorUI : MonoBehaviour
 
     private void Awake()
     {
-        playerSkills = GameObject.Find("Player").GetComponent<PlayerSkills>();
+        playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
     }
 
     private void Update()

@@ -11,9 +11,9 @@ public class PlayerSkills : MonoBehaviour
         {"Programming", 1 },
         {"Design", 1 },
         {"Finance", 1 },
-        {"Marketing", 1 },
-        {"Data Analysis", 1 },
-        {"Human Resources", 1 },
+        // {"Marketing", 1 },
+        // {"Data Analysis", 1 },
+        // {"Human Resources", 1 },
         {"Product Management", 1 },
         {"Quality Assurance", 1 }
     };
@@ -81,6 +81,6 @@ public class PlayerSkills : MonoBehaviour
 
     public void SetColor(Color color)
     {
-        GetComponent<MeshRenderer>().material.color = color;
+        GetComponentInChildren<MeshRenderer>().material.color = color;
     }
 }

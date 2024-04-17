@@ -14,7 +14,7 @@ public class SkillPrefabValues : MonoBehaviour
 
     private void Awake()
     {
-        playerSkills = GameObject.Find("Player").GetComponent<PlayerSkills>();
+        playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
         skillAttribution = GameObject.FindObjectOfType<SkillAttribution>();
     }
 

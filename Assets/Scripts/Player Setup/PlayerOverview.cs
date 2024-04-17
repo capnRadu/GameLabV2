@@ -11,24 +11,37 @@ public class PlayerOverview : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerNameText;
     [SerializeField] private TextMeshProUGUI companyNameText;
     [SerializeField] private Image playerColorImage;
-    [SerializeField] private TextMeshProUGUI playerValueText;
     [SerializeField] private CanvasRenderer radarMesh;
-    private int playerValue;
+
+    [SerializeField] private TextMeshProUGUI programmingText;
+    [SerializeField] private TextMeshProUGUI designText;
+    [SerializeField] private TextMeshProUGUI financeText;
+    [SerializeField] private TextMeshProUGUI productManagementText;
+    [SerializeField] private TextMeshProUGUI qualityAssuranceText;
+
+    // [SerializeField] private TextMeshProUGUI playerValueText;
+    // private int playerValue;
 
     private void Awake()
     {
-        playerSkills = GameObject.Find("Player").GetComponent<PlayerSkills>();
+        playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
 
         playerNameText.text = playerSkills.playerName;
         companyNameText.text = playerSkills.companyName;
         playerColorImage.color = playerSkills.playerColor;
 
-        foreach (var skill in playerSkills.skills)
+        programmingText.text = $"Programming ({playerSkills.skills["Programming"]})";
+        designText.text = $"Design ({playerSkills.skills["Design"]})";
+        financeText.text = $"Finance ({playerSkills.skills["Finance"]})";
+        productManagementText.text = $"Product Management ({playerSkills.skills["Product Management"]})";
+        qualityAssuranceText.text = $"Quality Assurance ({playerSkills.skills["Quality Assurance"]})";
+
+        /*foreach (var skill in playerSkills.skills)
         {
             playerValue += skill.Value;
         }
 
-        playerValueText.text = $"Player Value: {playerValue}";
+        playerValueText.text = $"Player Value: {playerValue}";*/
     }
 
     public void ContinueButton()
