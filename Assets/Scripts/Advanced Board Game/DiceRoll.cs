@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DiceRoll : MonoBehaviour
 {
     PlayerInputAdvanced playerInputAdvanced;
+    private int counter = 0;
 
     [SerializeField] private Sprite[] diceSides = new Sprite[6];
     private Image diceImage;
@@ -44,4 +46,16 @@ public class DiceRoll : MonoBehaviour
         playerInputAdvanced.steps = finalSide;
         StartCoroutine(playerInputAdvanced.DiceMovement());
     }
+    public void ButtonClick()
+{
+      counter++;
+}
+public void LoadScene(string sceneName)
+{
+    if (counter==4)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+}
+
 }
