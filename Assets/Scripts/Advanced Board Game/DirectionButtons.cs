@@ -39,6 +39,12 @@ public class DirectionButtons : MonoBehaviour
         upButton.SetActive(false);
         downButton.SetActive(false);
 
+        if (playerInputAdvanced.gamePiece.currentNode.tag == "YellowTile")
+        {
+            playerInputAdvanced.hireMenu.SetActive(true);
+            playerInputAdvanced.isHireMenuActive = true;
+        }
+
         playerInputAdvanced.StartCoroutine(playerInputAdvanced.SmoothCameraFov(playerInputAdvanced.defaultCameraFov, 0.2f));
         playerInputAdvanced.StartCoroutine(playerInputAdvanced.DiceMovement());
     }

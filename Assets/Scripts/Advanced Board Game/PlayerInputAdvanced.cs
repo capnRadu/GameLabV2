@@ -25,7 +25,7 @@ public class PlayerInputAdvanced : MonoBehaviour
     private int coins = 0;
     [SerializeField] private TextMeshProUGUI coinsText;
 
-    [SerializeField] private GameObject hireMenu;
+    public GameObject hireMenu;
     [NonSerialized] public bool isHireMenuActive = false;
 
     private void Start()
