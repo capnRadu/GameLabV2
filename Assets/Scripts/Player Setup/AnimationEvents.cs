@@ -1,9 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class AnimationEvents : MonoBehaviour
+public class AnimationEvents : NetworkBehaviour
 {
+    [SerializeField] private GameObject upButton;
+    [SerializeField] private GameObject downButton;
+    [SerializeField] private GameObject leftButton;
+    [SerializeField] private GameObject rightButton;
+    [SerializeField] private GameObject hireMenu;
+    [SerializeField] private GameObject diceRollText;
+
+    [SerializeField] private GameObject startButton;
+    [SerializeField] private GameObject hudCanvas;
     [SerializeField] private GameObject skillSelectPanel;
     [SerializeField] private GameObject fadeImage;
     [SerializeField] private GameObject skillAttributionPanel;
@@ -13,6 +23,17 @@ public class AnimationEvents : MonoBehaviour
     public void SkillSelectPanelOn()
     {
         skillSelectPanel.SetActive(true);
+        startButton.SetActive(false);
+        hudCanvas.SetActive(true);
+
+        upButton.SetActive(true);
+        downButton.SetActive(true);
+        leftButton.SetActive(true);
+        rightButton.SetActive(true);
+        diceRollText.SetActive(true);
+        hireMenu.SetActive(true);
+
+        NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>().Setup();
     }
 
     public void SkillAttributionPanelOn()

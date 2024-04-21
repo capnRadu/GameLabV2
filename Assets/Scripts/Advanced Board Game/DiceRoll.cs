@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DiceRoll : MonoBehaviour
+public class DiceRoll : NetworkBehaviour
 {
     PlayerInputAdvanced playerInputAdvanced;
 
@@ -12,7 +13,8 @@ public class DiceRoll : MonoBehaviour
 
     private void Start()
     {
-        playerInputAdvanced = GameObject.FindWithTag("Player").GetComponent<PlayerInputAdvanced>();
+        // playerInputAdvanced = GameObject.FindWithTag("Player").GetComponent<PlayerInputAdvanced>();
+        playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
         diceImage = GetComponent<Image>();
     }
 

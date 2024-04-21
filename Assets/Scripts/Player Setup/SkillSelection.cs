@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkillSelection : MonoBehaviour
+public class SkillSelection : NetworkBehaviour
 {
     PlayerSkills playerSkills;
 
@@ -31,7 +32,8 @@ public class SkillSelection : MonoBehaviour
 
     private void Awake()
     {
-        playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
+        // playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
+        playerSkills = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerSkills>();
     }
 
     private void Update()

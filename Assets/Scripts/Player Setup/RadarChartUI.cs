@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class RadarChartUI : MonoBehaviour
+public class RadarChartUI : NetworkBehaviour
 {
     PlayerSkills playerSkills;
 
@@ -31,7 +32,8 @@ public class RadarChartUI : MonoBehaviour
 
     private void Awake()
     {
-        playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
+        // playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
+        playerSkills = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerSkills>();
 
         programmingPoints = playerSkills.skills["Programming"];
         designPoints = playerSkills.skills["Design"];

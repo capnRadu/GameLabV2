@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerOverview : MonoBehaviour
+public class PlayerOverview : NetworkBehaviour
 {
     PlayerSkills playerSkills;
 
@@ -24,7 +25,8 @@ public class PlayerOverview : MonoBehaviour
 
     private void Awake()
     {
-        playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
+        // playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
+        playerSkills = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerSkills>();
 
         playerNameText.text = playerSkills.playerName;
         companyNameText.text = playerSkills.companyName;

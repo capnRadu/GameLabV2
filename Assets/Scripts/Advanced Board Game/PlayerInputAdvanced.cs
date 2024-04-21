@@ -42,6 +42,28 @@ public class PlayerInputAdvanced : MonoBehaviour
         // UpdateDiceMovement();
     }
 
+    public void Setup()
+    {
+        upDirectionButton = GameObject.FindWithTag("Up Button");
+        downDirectionButton = GameObject.FindWithTag("Down Button");
+        leftDirectionButton = GameObject.FindWithTag("Left Button");
+        rightDirectionButton = GameObject.FindWithTag("Right Button");
+
+        diceRollText = GameObject.FindWithTag("Text Dice Roll").GetComponent<TextMeshProUGUI>();
+        coinsText = GameObject.FindWithTag("Text Player Coins").GetComponent<TextMeshProUGUI>();
+
+        hireMenu = GameObject.FindWithTag("Hire Menu");
+
+        upDirectionButton.SetActive(false);
+        downDirectionButton.SetActive(false);
+        leftDirectionButton.SetActive(false);
+        rightDirectionButton.SetActive(false);
+
+        diceRollText.gameObject.SetActive(false);
+
+        hireMenu.SetActive(false);
+    }
+
     public IEnumerator DiceMovement()
     {
         diceRollText.text = steps.ToString();

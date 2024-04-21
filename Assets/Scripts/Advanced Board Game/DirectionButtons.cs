@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class DirectionButtons : MonoBehaviour
+public class DirectionButtons : NetworkBehaviour
 {
     PlayerInputAdvanced playerInputAdvanced;
 
@@ -13,7 +14,8 @@ public class DirectionButtons : MonoBehaviour
 
     private void Start()
     {
-        playerInputAdvanced = GameObject.FindWithTag("Player").GetComponent<PlayerInputAdvanced>();
+        // playerInputAdvanced = GameObject.FindWithTag("Player").GetComponent<PlayerInputAdvanced>();
+        playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
     }
 
     public void Bifurcation(string direction)
