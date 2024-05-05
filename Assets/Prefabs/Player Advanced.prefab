@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2100853213509388059}
   - component: {fileID: 8011723288353010403}
+  - component: {fileID: 5570783989289372875}
   - component: {fileID: 2400648729851549090}
   - component: {fileID: 6930741456935190574}
-  - component: {fileID: 5570783989289372875}
   - component: {fileID: 2259760985558345736}
   m_Layer: 0
   m_Name: Player Advanced
@@ -36,6 +36,7 @@ Transform:
   m_Children:
   - {fileID: 4160888544233685373}
   - {fileID: 7447781181630063749}
+  - {fileID: 5080032974257481994}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8011723288353010403
@@ -52,6 +53,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentNode: {fileID: 0}
   moveSpeed: 15
+--- !u!114 &5570783989289372875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668106830229042192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 829352521
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &2400648729851549090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,6 +91,7 @@ MonoBehaviour:
   leftDirectionButton: {fileID: 0}
   rightDirectionButton: {fileID: 0}
   diceRollText: {fileID: 0}
+  cameraPov: {fileID: 4732683388231445035}
   coinsText: {fileID: 0}
   hireMenu: {fileID: 0}
 --- !u!114 &6930741456935190574
@@ -83,27 +106,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efacc648841903488924b66009f7b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5570783989289372875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4668106830229042192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3103126626
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!114 &2259760985558345736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,6 +137,37 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!1 &4732683388231445035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5080032974257481994}
+  m_Layer: 0
+  m_Name: Camera POV
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5080032974257481994
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4732683388231445035}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.4383711, y: -0, z: -0, w: 0.89879405}
+  m_LocalPosition: {x: 0.03999996, y: 8.9, z: -8.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2100853213509388059}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8220947073105936225
 GameObject:
   m_ObjectHideFlags: 0

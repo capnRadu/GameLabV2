@@ -20,9 +20,13 @@ public class DiceRoll : NetworkBehaviour
 
     public void RollDice()
     {
-        if (!playerInputAdvanced.rolledDice && playerInputAdvanced.gamePiece.currentNode != null)
+        if (!playerInputAdvanced.rolledDice && playerInputAdvanced.gamePiece.currentNode != null && playerInputAdvanced == PlayersManager.Instance.currentPlayer.GetComponent<PlayerInputAdvanced>())
         {
             StartCoroutine(RollTheDice());
+        }
+        else
+        {
+            Debug.Log("Not your turn");
         }
     }
 

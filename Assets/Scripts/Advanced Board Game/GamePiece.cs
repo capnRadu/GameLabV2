@@ -13,7 +13,7 @@ public class GamePiece : MonoBehaviour
         currentNode = GameObject.Find("Node").GetComponent<MapNode>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         transform.position = Vector3.MoveTowards(transform.position, currentNode.transform.position, moveSpeed * Time.deltaTime);
         isMoving = transform.position != currentNode.transform.position;

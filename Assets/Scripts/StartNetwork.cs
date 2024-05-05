@@ -6,24 +6,33 @@ using UnityEngine;
 
 public class StartNetwork : MonoBehaviour
 {
-    [SerializeField] private GameObject networkPanel;
     [SerializeField] private GameObject fadeImage;
+    [SerializeField] private GameObject waitingText;
+
+    private void Update()
+    {
+        if (PlayersManager.Instance.players.Length > 1)
+        {
+            PlayersManager.Instance.currentPlayer = PlayersManager.Instance.players[0];
+            BeginGame();
+        }
+    }
 
     public void StartClient()
     {
         NetworkManager.Singleton.StartClient();
-        BeginGame();
     }
 
     public void StartHost()
     {
         NetworkManager.Singleton.StartHost();
-        BeginGame();
+        waitingText.SetActive(true);
     }
 
     private void BeginGame()
     {
-        networkPanel.SetActive(false);
         fadeImage.GetComponent<Animator>().enabled = true;
+        waitingText.SetActive(false);
+        gameObject.SetActive(false);
     }
 }

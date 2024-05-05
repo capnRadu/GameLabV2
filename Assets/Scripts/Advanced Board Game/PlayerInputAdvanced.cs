@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerInputAdvanced : MonoBehaviour
+public class PlayerInputAdvanced : NetworkBehaviour
 {
     [NonSerialized] public GamePiece gamePiece;
 
@@ -19,6 +20,7 @@ public class PlayerInputAdvanced : MonoBehaviour
     [NonSerialized] public int steps = 0;
     [NonSerialized] public bool rolledDice = false;
 
+    [SerializeField] private GameObject cameraPov;
     [NonSerialized] public int defaultCameraFov = 60;
     private int bifurcationCameraFov = 80;
 
@@ -40,6 +42,27 @@ public class PlayerInputAdvanced : MonoBehaviour
 
         // Dice movement (this is used without the separate dice roll script)
         // UpdateDiceMovement();
+    }
+
+    private void FixedUpdate()
+    {
+        // Update the camera POV to follow the current player
+        UpdateCameraPov();
+    }
+
+    private void UpdateCameraPov()
+    {
+        if (PlayersManager.Instance.currentPlayer != null && this == PlayersManager.Instance.currentPlayer.GetComponent<PlayerInputAdvanced>() && Camera.main.transform.position != cameraPov.transform.position)
+        {
+            Camera.main.transform.SetParent(gameObject.transform);
+            Camera.main.transform.rotation = cameraPov.transform.rotation;
+
+            Vector3 desiredPosition = cameraPov.transform.position;
+            Vector3 smoothedPosition = Vector3.Lerp(Camera.main.transform.position, desiredPosition, Time.deltaTime * 10f);
+            Camera.main.transform.position = smoothedPosition;
+
+            Debug.Log("Camera POV updated");
+        }
     }
 
     public void Setup()
@@ -122,6 +145,7 @@ public class PlayerInputAdvanced : MonoBehaviour
                 rolledDice = false;
                 diceRollText.gameObject.SetActive(false);
                 CheckTile();
+                NextPlayerServerRpc();
             }
         }
     }
@@ -164,6 +188,12 @@ public class PlayerInputAdvanced : MonoBehaviour
 
         coins = Mathf.Clamp(coins, 0, 1000000);
         coinsText.text = coins.ToString();
+    }
+
+    [ServerRpc]
+    private void NextPlayerServerRpc()
+    {
+        PlayersManager.Instance.NextPlayerClientRpc();
     }
 
     // KEYBOARD INPUT - UNUSED
