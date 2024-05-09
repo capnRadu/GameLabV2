@@ -10,6 +10,7 @@ public class HireMenu : NetworkBehaviour
     private void Start()
     {
         // playerInputAdvanced = GameObject.FindWithTag("Player").GetComponent<PlayerInputAdvanced>();
+        // playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
         playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
     }
 
@@ -25,6 +26,7 @@ public class HireMenu : NetworkBehaviour
         {
             playerInputAdvanced.rolledDice = false;
             playerInputAdvanced.diceRollText.gameObject.SetActive(false);
+            playerInputAdvanced.NextPlayerServerRpc();
         }
 
         gameObject.SetActive(false);

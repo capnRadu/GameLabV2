@@ -191,7 +191,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void NextPlayerServerRpc()
+    public void NextPlayerServerRpc()
     {
         PlayersManager.Instance.NextPlayerClientRpc();
     }
