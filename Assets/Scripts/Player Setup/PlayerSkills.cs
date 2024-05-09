@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerSkills : MonoBehaviour
+public class PlayerSkills : NetworkBehaviour
 {
     [NonSerialized]
     public Dictionary<string, int> skills = new Dictionary<string, int>()
@@ -62,6 +63,8 @@ public class PlayerSkills : MonoBehaviour
 
         playerColor = possibleColors[colorIndex];
         Debug.Log("Player color is " + playerColor);
+
+        SetColorServerRpc(playerColor);
     }
 
     public void PreviousPlayerColor()
@@ -77,9 +80,19 @@ public class PlayerSkills : MonoBehaviour
 
         playerColor = possibleColors[colorIndex];
         Debug.Log("Player color is " + playerColor);
+
+        SetColorServerRpc(playerColor);
     }
 
-    public void SetColor(Color color)
+    [ServerRpc]
+    private void SetColorServerRpc(Color color)
+    {
+        GetComponentInChildren<MeshRenderer>().material.color = color;
+        UpdateColorClientRpc(color);
+    }
+
+    [ClientRpc]
+    private void UpdateColorClientRpc(Color color)
     {
         GetComponentInChildren<MeshRenderer>().material.color = color;
     }

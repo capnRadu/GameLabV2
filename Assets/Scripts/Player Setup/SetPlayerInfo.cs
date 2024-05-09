@@ -14,15 +14,6 @@ public class SetPlayerInfo : NetworkBehaviour
         playerSkills = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerSkills>();
     }
 
-    private void Update()
-    {
-        if (GetComponent<Image>().color != playerSkills.playerColor)
-        {
-            GetComponent<Image>().color = playerSkills.playerColor;
-            playerSkills.SetColor(GetComponent<Image>().color);
-        }
-    }
-
     public void ContinueButton()
     {
         if (playerSkills.playerName.Length != 0 && playerSkills.companyName.Length != 0)
@@ -44,10 +35,12 @@ public class SetPlayerInfo : NetworkBehaviour
     public void NextColor()
     {
         playerSkills.NextPlayerColor();
+        GetComponent<Image>().color = playerSkills.playerColor;
     }
 
     public void PreviousColor()
     {
         playerSkills.PreviousPlayerColor();
+        GetComponent<Image>().color = playerSkills.playerColor;
     }
 }
