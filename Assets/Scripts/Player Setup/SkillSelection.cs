@@ -49,6 +49,7 @@ public class SkillSelection : NetworkBehaviour
                 if (!programmingSelected && selections > 0)
                 {
                     playerSkills.skills["Programming"]++;
+                    playerSkills.primarySkills.Add("Programming");
                     Debug.Log("Programming skill level: " + playerSkills.skills["Programming"]);
                     programmingSelected = true;
                     programmingButton.GetComponent<Image>().color = Color.gray;
@@ -57,6 +58,7 @@ public class SkillSelection : NetworkBehaviour
                 else if (programmingSelected)
                 {
                     playerSkills.skills["Programming"]--;
+                    playerSkills.primarySkills.Remove("Programming");
                     Debug.Log("Programming skill level: " + playerSkills.skills["Programming"]);
                     programmingSelected = false;
                     programmingButton.GetComponent<Image>().color = new Color(0.9607843f, 0.9607843f, 0.8627451f, 1f);
@@ -68,6 +70,7 @@ public class SkillSelection : NetworkBehaviour
                 if (!designSelected && selections > 0)
                 {
                     playerSkills.skills["Design"]++;
+                    playerSkills.primarySkills.Add("Design");
                     Debug.Log("Design skill level: " + playerSkills.skills["Design"]);
                     designSelected = true;
                     designButton.GetComponent<Image>().color = Color.gray;
@@ -76,6 +79,7 @@ public class SkillSelection : NetworkBehaviour
                 else if (designSelected)
                 {
                     playerSkills.skills["Design"]--;
+                    playerSkills.primarySkills.Remove("Design");
                     Debug.Log("Design skill level: " + playerSkills.skills["Design"]);
                     designSelected = false;
                     designButton.GetComponent<Image>().color = new Color(0.9607843f, 0.9607843f, 0.8627451f, 1f);
@@ -87,6 +91,7 @@ public class SkillSelection : NetworkBehaviour
                 if (!financeSelected && selections > 0)
                 {
                     playerSkills.skills["Finance"]++;
+                    playerSkills.primarySkills.Add("Finance");
                     Debug.Log("Finance skill level: " + playerSkills.skills["Finance"]);
                     financeSelected = true;
                     financeButton.GetComponent<Image>().color = Color.gray;
@@ -95,6 +100,7 @@ public class SkillSelection : NetworkBehaviour
                 else if (financeSelected)
                 {
                     playerSkills.skills["Finance"]--;
+                    playerSkills.primarySkills.Remove("Finance");
                     Debug.Log("Finance skill level: " + playerSkills.skills["Finance"]);
                     financeSelected = false;
                     financeButton.GetComponent<Image>().color = new Color(0.9607843f, 0.9607843f, 0.8627451f, 1f);
@@ -163,6 +169,7 @@ public class SkillSelection : NetworkBehaviour
                 if (!productSelected && selections > 0)
                 {
                     playerSkills.skills["Product Management"]++;
+                    playerSkills.primarySkills.Add("Product Management");
                     Debug.Log("Product Management skill level: " + playerSkills.skills["Product Management"]);
                     productSelected = true;
                     productButton.GetComponent<Image>().color = Color.gray;
@@ -171,6 +178,7 @@ public class SkillSelection : NetworkBehaviour
                 else if (productSelected)
                 {
                     playerSkills.skills["Product Management"]--;
+                    playerSkills.primarySkills.Remove("Product Management");
                     Debug.Log("Product Management skill level: " + playerSkills.skills["Product Management"]);
                     productSelected = false;
                     productButton.GetComponent<Image>().color = new Color(0.9607843f, 0.9607843f, 0.8627451f, 1f);
@@ -182,6 +190,7 @@ public class SkillSelection : NetworkBehaviour
                 if (!qaSelected && selections > 0)
                 {
                     playerSkills.skills["Quality Assurance"]++;
+                    playerSkills.primarySkills.Add("Quality Assurance");
                     Debug.Log("Quality Assurance skill level: " + playerSkills.skills["Quality Assurance"]);
                     qaSelected = true;
                     qaButton.GetComponent<Image>().color = Color.gray;
@@ -190,6 +199,7 @@ public class SkillSelection : NetworkBehaviour
                 else if (qaSelected)
                 {
                     playerSkills.skills["Quality Assurance"]--;
+                    playerSkills.primarySkills.Remove("Quality Assurance");
                     Debug.Log("Quality Assurance skill level: " + playerSkills.skills["Quality Assurance"]);
                     qaSelected = false;
                     qaButton.GetComponent<Image>().color = new Color(0.9607843f, 0.9607843f, 0.8627451f, 1f);
@@ -204,6 +214,11 @@ public class SkillSelection : NetworkBehaviour
         if (selections == 0)
         {
             GetComponent<Animator>().Play("FadeOut");
+
+            foreach (var skill in playerSkills.primarySkills)
+            {
+                Debug.Log("Primary skill: " + skill);
+            }
         }
     }
 }

@@ -7,11 +7,31 @@ public class HireMenu : NetworkBehaviour
 {
     PlayerInputAdvanced playerInputAdvanced;
 
+    [SerializeField] private GameObject employeePrefab;
+    private float posY = 170f;
+    private int spacing = 90;
+
     private void Start()
     {
         // playerInputAdvanced = GameObject.FindWithTag("Player").GetComponent<PlayerInputAdvanced>();
         // playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
         playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
+
+        InstantiateEmployees(employeePrefab);
+    }
+
+    private void InstantiateEmployees(GameObject employeePrefab)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            GameObject employee = Instantiate(employeePrefab, new Vector3(0, posY, 0), Quaternion.identity);
+            employee.transform.SetParent(gameObject.transform);
+            employee.transform.localPosition = new Vector3(0, posY, 0);
+            employee.transform.localScale = new Vector3(1, 1, 1);
+            employee.transform.localRotation = Quaternion.identity;
+
+            posY -= spacing;
+        }
     }
 
     public void CloseMenu()

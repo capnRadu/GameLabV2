@@ -18,6 +18,7 @@ public class PlayerSkills : NetworkBehaviour
         {"Product Management", 1 },
         {"Quality Assurance", 1 }
     };
+    [NonSerialized] public List<string> primarySkills = new List<string>();
     [NonSerialized] public int maxAttributePoints = 0;
 
     [NonSerialized] public string playerName = "";

@@ -25,7 +25,9 @@ public class PlayerInputAdvanced : NetworkBehaviour
     private int bifurcationCameraFov = 80;
 
     private int coins = 0;
+    private int employees = 0;
     [SerializeField] private TextMeshProUGUI coinsText;
+    [SerializeField] private TextMeshProUGUI employeesText;
 
     public GameObject hireMenu;
     [NonSerialized] public bool isHireMenuActive = false;
@@ -74,6 +76,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
 
         diceRollText = GameObject.FindWithTag("Text Dice Roll").GetComponent<TextMeshProUGUI>();
         coinsText = GameObject.FindWithTag("Text Player Coins").GetComponent<TextMeshProUGUI>();
+        employeesText = GameObject.FindWithTag("Text Player Employees").GetComponent<TextMeshProUGUI>();
 
         hireMenu = GameObject.FindWithTag("Hire Menu");
 

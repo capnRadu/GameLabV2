@@ -35,6 +35,11 @@ public class RadarChartUI : NetworkBehaviour
         // playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
         playerSkills = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerSkills>();
 
+        SetupMesh();
+    }
+
+    public void SetupMesh()
+    {
         programmingPoints = playerSkills.skills["Programming"];
         designPoints = playerSkills.skills["Design"];
         financePoints = playerSkills.skills["Finance"];
@@ -55,7 +60,7 @@ public class RadarChartUI : NetworkBehaviour
 
         Mesh mesh = new Mesh();
 
-        Vector3[] vertices = new Vector3[6];  
+        Vector3[] vertices = new Vector3[6];
         Vector2[] uv = new Vector2[6];
         int[] triangles = new int[3 * 5];
 

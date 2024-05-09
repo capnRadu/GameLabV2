@@ -14,6 +14,7 @@ TagManager:
   - Text Dice Roll
   - Text Player Coins
   - Hire Menu
+  - Text Player Employees
   layers:
   - Default
   - TransparentFX

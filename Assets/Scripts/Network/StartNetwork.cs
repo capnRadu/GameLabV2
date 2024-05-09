@@ -41,6 +41,7 @@ public class StartNetwork : MonoBehaviour
         NetworkManager.Singleton.StartHost();
         GetLocalIPAddress();
         waitingText.SetActive(true);
+        ipAddressText.gameObject.SetActive(true);
         hostButton.SetActive(false);
         clientButton.SetActive(false);
         ipInput.gameObject.SetActive(false);

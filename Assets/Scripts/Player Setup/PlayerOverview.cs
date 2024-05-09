@@ -27,10 +27,22 @@ public class PlayerOverview : NetworkBehaviour
     {
         // playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
         playerSkills = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerSkills>();
+        Debug.Log("succes");
 
-        playerNameText.text = playerSkills.playerName;
-        companyNameText.text = playerSkills.companyName;
-        playerColorImage.color = playerSkills.playerColor;
+        if (playerNameText)
+        {
+            playerNameText.text = playerSkills.playerName;
+        }
+
+        if (companyNameText)
+        {
+            companyNameText.text = playerSkills.companyName;
+        }
+
+        if (playerColorImage)
+        {
+            playerColorImage.color = playerSkills.playerColor;
+        }
 
         programmingText.text = $"Programming ({playerSkills.skills["Programming"]})";
         designText.text = $"Design ({playerSkills.skills["Design"]})";
