@@ -2241,6 +2241,8 @@ MonoBehaviour:
   waitingText: {fileID: 1559757293}
   ipAddressText: {fileID: 808709032}
   ipInput: {fileID: 52683147}
+  hostButton: {fileID: 1057150204}
+  clientButton: {fileID: 641313521}
 --- !u!1 &208621818
 GameObject:
   m_ObjectHideFlags: 0
@@ -16556,9 +16558,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1693534591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 90}
   m_SizeDelta: {x: 363.82, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1559757295
