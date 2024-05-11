@@ -26,6 +26,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
 
     [NonSerialized] public int coins = 0;
     [NonSerialized] public int employees = 0;
+    [NonSerialized] public int maxEmployees = 3;
     [NonSerialized] public TextMeshProUGUI coinsText;
     [NonSerialized] public TextMeshProUGUI employeesText;
 
@@ -77,6 +78,8 @@ public class PlayerInputAdvanced : NetworkBehaviour
         diceRollText = GameObject.FindWithTag("Text Dice Roll").GetComponent<TextMeshProUGUI>();
         coinsText = GameObject.FindWithTag("Text Player Coins").GetComponent<TextMeshProUGUI>();
         employeesText = GameObject.FindWithTag("Text Player Employees").GetComponent<TextMeshProUGUI>();
+
+        employeesText.text = $"{employees}/{maxEmployees}";
 
         hireMenu = GameObject.FindWithTag("Hire Menu");
 

@@ -43,8 +43,6 @@ public class PlayerOverview : NetworkBehaviour
         {
             playerColorImage.color = playerSkills.playerColor;
         }
-
-        SkillPointsSetup();
     }
 
     private void OnEnable()

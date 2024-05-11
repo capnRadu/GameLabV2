@@ -80,13 +80,13 @@ public class EmployeeSkills : NetworkBehaviour
 
     public void HireEmployee()
     {
-        if (playerInputAdvanced.coins >= hireCost)
+        if (playerInputAdvanced.coins >= hireCost && playerInputAdvanced.employees < playerInputAdvanced.maxEmployees)
         {
             playerInputAdvanced.coins -= hireCost;
             playerInputAdvanced.coinsText.text = playerInputAdvanced.coins.ToString();
 
             playerInputAdvanced.employees++;
-            playerInputAdvanced.employeesText.text = playerInputAdvanced.employees.ToString();
+            playerInputAdvanced.employeesText.text = $"{playerInputAdvanced.employees}/{playerInputAdvanced.maxEmployees}";
 
             foreach (var skill in skills)
             {
