@@ -34,7 +34,10 @@ public class RadarChartUI : NetworkBehaviour
     {
         // playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
         playerSkills = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerSkills>();
+    }
 
+    private void OnEnable()
+    {
         SetupMesh();
     }
 

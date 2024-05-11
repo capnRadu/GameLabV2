@@ -44,6 +44,16 @@ public class PlayerOverview : NetworkBehaviour
             playerColorImage.color = playerSkills.playerColor;
         }
 
+        SkillPointsSetup();
+    }
+
+    private void OnEnable()
+    {
+        SkillPointsSetup();
+    }
+
+    public void SkillPointsSetup()
+    {
         programmingText.text = $"Programming ({playerSkills.skills["Programming"]})";
         designText.text = $"Design ({playerSkills.skills["Design"]})";
         financeText.text = $"Finance ({playerSkills.skills["Finance"]})";

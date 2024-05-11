@@ -24,10 +24,10 @@ public class PlayerInputAdvanced : NetworkBehaviour
     [NonSerialized] public int defaultCameraFov = 60;
     private int bifurcationCameraFov = 80;
 
-    private int coins = 0;
-    private int employees = 0;
-    [SerializeField] private TextMeshProUGUI coinsText;
-    [SerializeField] private TextMeshProUGUI employeesText;
+    [NonSerialized] public int coins = 0;
+    [NonSerialized] public int employees = 0;
+    [NonSerialized] public TextMeshProUGUI coinsText;
+    [NonSerialized] public TextMeshProUGUI employeesText;
 
     public GameObject hireMenu;
     [NonSerialized] public bool isHireMenuActive = false;
