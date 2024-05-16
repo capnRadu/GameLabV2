@@ -478,7 +478,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: {fileID: 5038819863734298459}
   skillPointsText: {fileID: 1705705022679217745}
-  skillPoints: 0
 --- !u!1 &4795753607491360986
 GameObject:
   m_ObjectHideFlags: 0

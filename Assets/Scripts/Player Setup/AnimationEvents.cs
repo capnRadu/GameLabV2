@@ -10,6 +10,7 @@ public class AnimationEvents : NetworkBehaviour
     [SerializeField] private GameObject leftButton;
     [SerializeField] private GameObject rightButton;
     [SerializeField] private GameObject hireMenu;
+    [SerializeField] private GameObject officeMenu;
     [SerializeField] private GameObject diceRollText;
 
     [SerializeField] private GameObject startButton;
@@ -32,6 +33,7 @@ public class AnimationEvents : NetworkBehaviour
         rightButton.SetActive(true);
         diceRollText.SetActive(true);
         hireMenu.SetActive(true);
+        officeMenu.SetActive(true);
 
         NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>().Setup();
     }

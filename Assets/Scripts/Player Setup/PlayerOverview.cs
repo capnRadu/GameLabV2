@@ -27,7 +27,6 @@ public class PlayerOverview : NetworkBehaviour
     {
         // playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
         playerSkills = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerSkills>();
-        Debug.Log("succes");
 
         if (playerNameText)
         {

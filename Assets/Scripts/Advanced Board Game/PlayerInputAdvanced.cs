@@ -33,6 +33,9 @@ public class PlayerInputAdvanced : NetworkBehaviour
     public GameObject hireMenu;
     [NonSerialized] public bool isHireMenuActive = false;
 
+    public GameObject officeMenu;
+    [NonSerialized] public bool isOfficeMenuActive = false;
+
     private void Start()
     {
         gamePiece = GetComponent<GamePiece>();
@@ -82,6 +85,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
         employeesText.text = $"{employees}/{maxEmployees}";
 
         hireMenu = GameObject.FindWithTag("Hire Menu");
+        officeMenu = GameObject.FindWithTag("Office Menu");
 
         upDirectionButton.SetActive(false);
         downDirectionButton.SetActive(false);
@@ -91,6 +95,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
         diceRollText.gameObject.SetActive(false);
 
         hireMenu.SetActive(false);
+        officeMenu.SetActive(false);
     }
 
     public IEnumerator DiceMovement()
@@ -109,21 +114,30 @@ public class PlayerInputAdvanced : NetworkBehaviour
             yield break;
         }
 
-        while (steps > 0 && gamePiece.currentNode.NeighborsCount().Count == 1 && !isHireMenuActive)
+        while (steps > 0 && gamePiece.currentNode.NeighborsCount().Count == 1 && !isHireMenuActive && !isOfficeMenuActive)
         {
             MoveToNode(gamePiece.currentNode.NeighborsCount()[0]);
             diceRollText.text = steps.ToString();
 
             yield return new WaitForSeconds(0.5f);
 
-            if (gamePiece.currentNode.tag == "YellowTile")
+            switch (gamePiece.currentNode.tag)
             {
-                hireMenu.SetActive(true);
-                isHireMenuActive = true;
+                case "YellowTile":
+                    hireMenu.SetActive(true);
+                    isHireMenuActive = true;
+                    break;
+                case "GreenTile":
+                    if (gamePiece.currentNode.GetComponent<Office>().owningPlayer.Length == 0)
+                    {
+                        officeMenu.SetActive(true);
+                        isOfficeMenuActive = true;
+                    }
+                    break;
             }
         }
 
-        if (!isHireMenuActive)
+        if (!isHireMenuActive && !isOfficeMenuActive)
         {
             if (steps != 0)
             {
