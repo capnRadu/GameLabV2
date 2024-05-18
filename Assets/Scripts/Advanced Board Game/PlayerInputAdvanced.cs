@@ -36,6 +36,8 @@ public class PlayerInputAdvanced : NetworkBehaviour
     public GameObject officeMenu;
     [NonSerialized] public bool isOfficeMenuActive = false;
 
+    private string[] risks = { "employee", "coin" };
+
     private void Start()
     {
         gamePiece = GetComponent<GamePiece>();
@@ -128,10 +130,30 @@ public class PlayerInputAdvanced : NetworkBehaviour
                     isHireMenuActive = true;
                     break;
                 case "GreenTile":
-                    if (gamePiece.currentNode.GetComponent<Office>().owningPlayer.Length == 0)
+                    if (gamePiece.currentNode.GetComponent<Office>().owningPlayer.Length == 0 && steps == 0)
                     {
                         officeMenu.SetActive(true);
                         isOfficeMenuActive = true;
+                    }
+                    break;
+                case "BlackTile":
+                    if (steps == 0)
+                    {
+                        int randomRisk = UnityEngine.Random.Range(0, risks.Length);
+
+                        switch (risks[randomRisk])
+                        {
+                            case "employee":
+                                employees -= 2;
+                                employeesText.text = $"{employees}/{maxEmployees}";
+                                Debug.Log("You lost 2 employees");
+                                break;
+                            case "coin":
+                                coins = (int)(coins / 2);
+                                coinsText.text = coins.ToString();
+                                Debug.Log("You lost half of your coins");
+                                break;
+                        }
                     }
                     break;
             }

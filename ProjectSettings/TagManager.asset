@@ -17,6 +17,7 @@ TagManager:
   - Text Player Employees
   - GreenTile
   - Office Menu
+  - BlackTile
   layers:
   - Default
   - TransparentFX
