@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class MapNode : MonoBehaviour
+public class MapNode : NetworkBehaviour
 {
     public MapNode upNeighbor;
     public MapNode rightNeighbor;

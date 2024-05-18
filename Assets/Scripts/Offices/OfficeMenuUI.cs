@@ -37,7 +37,8 @@ public class OfficeMenuUI : NetworkBehaviour
             playerInputAdvanced.maxEmployees += office.maxEmployeesIncrease;
             playerInputAdvanced.employeesText.text = $"{playerInputAdvanced.employees}/{playerInputAdvanced.maxEmployees}";
 
-            office.owningPlayer = playerInputAdvanced.GetComponent<PlayerSkills>().playerName;
+            // office.owningPlayer = playerInputAdvanced.GetComponent<PlayerSkills>().playerName;
+            office.UpdateOfficeOwnershipServerRpc();
 
             CloseMenu();
         }

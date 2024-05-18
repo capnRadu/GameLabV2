@@ -174,10 +174,17 @@ public class PlayerInputAdvanced : NetworkBehaviour
     {
         if (node != null)
         {
-            gamePiece.currentNode = node;
+            // gamePiece.currentNode = node;
+            UpdateCurrentNodeServerRpc(node);
             steps--;
             Debug.Log($"Remaining steps: {steps}");
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdateCurrentNodeServerRpc(NetworkBehaviourReference mapNodeReference)
+    {
+        PlayersManager.Instance.UpdateCurrentNodeClientRpc(mapNodeReference);
     }
 
     public IEnumerator SmoothCameraFov(int targetFov, float duration)

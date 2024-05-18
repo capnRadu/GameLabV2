@@ -41,8 +41,17 @@ public class PlayerSkills : NetworkBehaviour
 
     public void SetPlayerName(string name)
     {
-        playerName = name;
-        Debug.Log("Player name is " + playerName);
+        // playerName = name;
+        // Debug.Log("Player name is " + playerName);
+        SetPlayerNameServerRpc(name, default);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerNameServerRpc(string name, ServerRpcParams serverRpcParams)
+    {
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
+
+        PlayersManager.Instance.SetPlayerNameClientRpc(name, clientId);
     }
 
     public void SetCompanyName(string name)
