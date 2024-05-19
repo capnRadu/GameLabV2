@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerSkills : NetworkBehaviour
@@ -94,6 +96,26 @@ public class PlayerSkills : NetworkBehaviour
         SetColorServerRpc(playerColor);
     }
 
+    public void UpdatePlayerAttributes()
+    {
+        for (int i = 0; i < skills.Count; i++)
+        {
+            var skill = skills.ElementAt(i);
+            var skillName = skill.Key;
+            var skillValue = skill.Value;
+
+            UpdatePlayerAttributesServerRpc(skillName, skillValue, default);
+        }
+    }
+
+    public void UpdatePlayerPrimarySkills()
+    {
+        foreach (var skill in primarySkills)
+        {
+            UpdatePlayerPrimarySkillsServerRpc(skill, default);
+        }
+    }
+
     [ServerRpc]
     private void SetColorServerRpc(Color color)
     {
@@ -105,5 +127,21 @@ public class PlayerSkills : NetworkBehaviour
     private void UpdateColorClientRpc(Color color)
     {
         GetComponentInChildren<MeshRenderer>().material.color = color;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdatePlayerAttributesServerRpc(string playerSkill, int skillAttributes, ServerRpcParams serverRpcParams)
+    {
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
+
+        PlayersManager.Instance.UpdatePlayerAttributesClientRpc(playerSkill, skillAttributes, clientId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdatePlayerPrimarySkillsServerRpc(string primarySkill, ServerRpcParams serverRpcParams)
+    {
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
+
+        PlayersManager.Instance.UpdatePlayerPrimarySkillsClientRpc(primarySkill, clientId);
     }
 }

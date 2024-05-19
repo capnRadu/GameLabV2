@@ -83,9 +83,11 @@ public class EmployeeSkills : NetworkBehaviour
         if (playerInputAdvanced.coins >= hireCost && playerInputAdvanced.employees < playerInputAdvanced.maxEmployees)
         {
             playerInputAdvanced.coins -= hireCost;
+            playerInputAdvanced.UpdatePlayerCoinsServerRpc(playerInputAdvanced.coins, default);
             playerInputAdvanced.coinsText.text = playerInputAdvanced.coins.ToString();
 
             playerInputAdvanced.employees++;
+            playerInputAdvanced.UpdatePlayerEmployeesServerRpc(playerInputAdvanced.employees, default);
             playerInputAdvanced.employeesText.text = $"{playerInputAdvanced.employees}/{playerInputAdvanced.maxEmployees}";
 
             foreach (var skill in skills)
@@ -107,6 +109,8 @@ public class EmployeeSkills : NetworkBehaviour
             {
                 radarChart.SetupMesh();
             }
+
+            playerSkills.UpdatePlayerAttributes();
 
             Destroy(gameObject);
         }

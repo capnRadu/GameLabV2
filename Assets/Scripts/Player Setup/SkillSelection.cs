@@ -213,6 +213,8 @@ public class SkillSelection : NetworkBehaviour
     {
         if (selections == 0)
         {
+            playerSkills.UpdatePlayerPrimarySkills();
+
             GetComponent<Animator>().Play("FadeOut");
 
             foreach (var skill in playerSkills.primarySkills)

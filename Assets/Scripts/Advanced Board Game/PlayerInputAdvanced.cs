@@ -145,11 +145,13 @@ public class PlayerInputAdvanced : NetworkBehaviour
                         {
                             case "employee":
                                 employees -= 2;
+                                UpdatePlayerEmployeesServerRpc(employees, default);
                                 employeesText.text = $"{employees}/{maxEmployees}";
                                 Debug.Log("You lost 2 employees");
                                 break;
                             case "coin":
                                 coins = (int)(coins / 2);
+                                UpdatePlayerCoinsServerRpc(coins, default);
                                 coinsText.text = coins.ToString();
                                 Debug.Log("You lost half of your coins");
                                 break;
@@ -236,7 +238,24 @@ public class PlayerInputAdvanced : NetworkBehaviour
         }
 
         coins = Mathf.Clamp(coins, 0, 1000000);
+        UpdatePlayerCoinsServerRpc(coins, default);
         coinsText.text = coins.ToString();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdatePlayerCoinsServerRpc(int amount, ServerRpcParams serverRpcParams)
+    {
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
+
+        PlayersManager.Instance.UpdatePlayerCoinsClientRpc(amount, clientId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdatePlayerEmployeesServerRpc(int amount, ServerRpcParams serverRpcParams)
+    {
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
+
+        PlayersManager.Instance.UpdatePlayerEmployeesClientRpc(amount, clientId);
     }
 
     [ServerRpc]

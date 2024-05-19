@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,6 +8,10 @@ public class PlayersManager : NetworkBehaviour
 
     public GameObject[] players;
     public GameObject currentPlayer;
+
+    private int gameTurns = 5;
+    private float maxPoints = 0;
+    private string winner = null;
 
     private void Awake()
     {
@@ -43,6 +48,44 @@ public class PlayersManager : NetworkBehaviour
     public void NextPlayerClientRpc()
     {
         currentPlayer = players[(System.Array.IndexOf(players, currentPlayer) + 1) % players.Length];
+
+        if ((System.Array.IndexOf(players, currentPlayer) + 1) % players.Length == players.Length - 1 && gameTurns > 0)
+        {
+            gameTurns--;
+            Debug.Log(gameTurns);
+        }
+        
+        if (gameTurns == 0)
+        {
+            foreach (GameObject player in players)
+            {
+                PlayerSkills playerSkills = player.GetComponent<PlayerSkills>();
+                PlayerInputAdvanced playerInputAdvanced = player.GetComponent<PlayerInputAdvanced>();
+
+                float skillPoints = 0;
+
+                foreach (string skill in playerSkills.skills.Keys)
+                {
+                    if (!playerSkills.primarySkills.Contains(skill))
+                    {
+                        skillPoints += playerSkills.skills[skill];
+                    }
+                }
+
+                Debug.LogWarning($"{playerInputAdvanced.employees}  {playerInputAdvanced.coins}  {skillPoints}");
+
+                float totalPoints = 0.5f * playerInputAdvanced.employees + 0.35f * skillPoints + 0.15f * playerInputAdvanced.coins;
+                Debug.Log(playerSkills.playerName + " has " + totalPoints + " points");
+
+                if (totalPoints > maxPoints)
+                {
+                    maxPoints = totalPoints;
+                    winner = playerSkills.playerName;
+                }
+            }
+
+            Debug.Log("The winner is " + winner);
+        }
     }
 
     [ClientRpc]
@@ -63,5 +106,64 @@ public class PlayersManager : NetworkBehaviour
     {
         currentPlayer.GetComponent<GamePiece>().currentNode.GetComponent<Office>().owningPlayer = currentPlayer.GetComponent<PlayerSkills>().playerName;
         Debug.Log("Office ownership updated");
+    }
+
+    [ClientRpc]
+    public void UpdatePlayerCoinsClientRpc(int coins, ulong clientId)
+    {
+        foreach (GameObject player in players)
+        {
+            if (player.GetComponent<NetworkObject>().OwnerClientId == clientId)
+            {
+                player.GetComponent<PlayerInputAdvanced>().coins = coins;
+
+                Debug.Log(player.GetComponent<PlayerSkills>().playerName + " has " + player.GetComponent<PlayerInputAdvanced>().coins + " coins");
+            }
+        }
+    }
+
+    [ClientRpc]
+    public void UpdatePlayerEmployeesClientRpc(int employees, ulong clientId)
+    {
+        foreach (GameObject player in players)
+        {
+            if (player.GetComponent<NetworkObject>().OwnerClientId == clientId)
+            {
+                player.GetComponent<PlayerInputAdvanced>().employees = employees;
+
+                Debug.Log(player.GetComponent<PlayerSkills>().playerName + " has " + player.GetComponent<PlayerInputAdvanced>().employees + " employees");
+            }
+        }
+    }
+
+    [ClientRpc]
+    public void UpdatePlayerAttributesClientRpc(string playerSkill, int skillAttributes, ulong clientId)
+    {
+        foreach (GameObject player in players)
+        {
+            if (player.GetComponent<NetworkObject>().OwnerClientId == clientId)
+            {
+                player.GetComponent<PlayerSkills>().skills[playerSkill] = skillAttributes;
+
+                Debug.Log(player + " has " + player.GetComponent<PlayerSkills>().skills[playerSkill] + " " + playerSkill);
+            }
+        }
+    }
+
+    [ClientRpc]
+    public void UpdatePlayerPrimarySkillsClientRpc(string primarySkill, ulong clientId)
+    {
+        foreach (GameObject player in players)
+        {
+            if (player.GetComponent<NetworkObject>().OwnerClientId == clientId)
+            {
+                if (!player.GetComponent<PlayerSkills>().primarySkills.Contains(primarySkill))
+                {
+                    player.GetComponent<PlayerSkills>().primarySkills.Add(primarySkill);
+
+                    Debug.Log(player + " has " + primarySkill + " as a primary skill");
+                }
+            }
+        }
     }
 }

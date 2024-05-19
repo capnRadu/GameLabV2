@@ -64,6 +64,8 @@ public class SkillAttribution : NetworkBehaviour
 
             GetComponent<Animator>().Play("FadeOut");
 
+            playerSkills.UpdatePlayerAttributes();
+
             foreach (var attributePrefab in FindObjectsOfType<SkillPrefabValues>())
             {
                 attributePrefab.GetComponent<Animator>().Play("FadeOut");

@@ -17952,7 +17952,7 @@ GameObject:
   - component: {fileID: 1422620428}
   m_Layer: 0
   m_Name: Node (87)
-  m_TagString: YellowTile
+  m_TagString: RedTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -18029,7 +18029,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 38d1ce7dbce341846a2c4ec3d6858cfe, type: 2}
+  - {fileID: 2100000, guid: e4079d4c5eaf83648a80b4772e80cbf2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

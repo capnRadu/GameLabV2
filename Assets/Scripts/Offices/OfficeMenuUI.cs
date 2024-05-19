@@ -32,6 +32,7 @@ public class OfficeMenuUI : NetworkBehaviour
         if (playerInputAdvanced.coins >= office.cost)
         {
             playerInputAdvanced.coins -= office.cost;
+            playerInputAdvanced.UpdatePlayerCoinsServerRpc(playerInputAdvanced.coins, default);
             playerInputAdvanced.coinsText.text = playerInputAdvanced.coins.ToString();
 
             playerInputAdvanced.maxEmployees += office.maxEmployeesIncrease;
