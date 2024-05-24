@@ -23,7 +23,7 @@ public class PlayerSkills : NetworkBehaviour
     [NonSerialized] public List<string> primarySkills = new List<string>();
     [NonSerialized] public int maxAttributePoints = 0;
 
-    [NonSerialized] public string playerName = "";
+    public string playerName = "";
     [NonSerialized] public string companyName = "";
     [NonSerialized] public Color playerColor = Color.white;
 

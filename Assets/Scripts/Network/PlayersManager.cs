@@ -8,6 +8,8 @@ public class PlayersManager : NetworkBehaviour
 
     public GameObject[] players;
     public GameObject currentPlayer;
+    public int clientIndex = -1;
+    private bool indexCheck = false;
 
     private int gameTurns = 5;
     private float maxPoints = 0;
@@ -28,7 +30,26 @@ public class PlayersManager : NetworkBehaviour
 
     private void Update()
     {
-        players = GameObject.FindGameObjectsWithTag("Player");
+        if (players.Length != 4) 
+        {
+            players = GameObject.FindGameObjectsWithTag("Player");
+
+            if (players.Length > 0 && clientIndex == -1)
+            {
+                clientIndex = players.Length - 1;
+                currentPlayer = players[0];
+            }
+        }
+        else if (clientIndex == 2 && !indexCheck)
+        {
+            (players[clientIndex], players[clientIndex - 1]) = (players[clientIndex - 1], players[clientIndex]);
+            indexCheck = true;
+        }
+        else if (clientIndex == 3 && !indexCheck)
+        {
+            (players[clientIndex], players[clientIndex - 2]) = (players[clientIndex - 2], players[clientIndex]);
+            indexCheck = true;
+        }
     }
 
     [ClientRpc]
@@ -49,7 +70,7 @@ public class PlayersManager : NetworkBehaviour
     {
         currentPlayer = players[(System.Array.IndexOf(players, currentPlayer) + 1) % players.Length];
 
-        if ((System.Array.IndexOf(players, currentPlayer) + 1) % players.Length == players.Length - 1 && gameTurns > 0)
+        if (System.Array.IndexOf(players, currentPlayer) % players.Length == 0 && gameTurns > 0)
         {
             gameTurns--;
             Debug.Log(gameTurns);
