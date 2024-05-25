@@ -18,6 +18,7 @@ TagManager:
   - GreenTile
   - Office Menu
   - BlackTile
+  - Image QA
   layers:
   - Default
   - TransparentFX
