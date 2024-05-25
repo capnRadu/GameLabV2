@@ -26,7 +26,7 @@ public class SpotTheDifferences : MonoBehaviour
 
     private void OnDifferenceFound(Button difference)
     {
-        if (Input.touchCount == 1)
+        if (Input.touchCount != 2)
         {
             difference.interactable = false;
             difference.GetComponent<Animator>().enabled = true;

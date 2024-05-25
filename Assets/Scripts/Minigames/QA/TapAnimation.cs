@@ -18,7 +18,7 @@ public class TapAnimation : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && Input.touchCount == 1)
+        if (Input.GetMouseButtonDown(0) && Input.touchCount != 2)
         {
             Vector2 tapPosition = Input.mousePosition;
             StartCoroutine(ShowTapCircle(tapPosition));
