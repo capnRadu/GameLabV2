@@ -10,6 +10,7 @@ public class ManagerFinance : MonoBehaviour
     WindowGraph windowGraph;
     [NonSerialized] public bool isRoundActive = false;
     [NonSerialized] public bool canTrade = false;
+    [NonSerialized] public bool skillStatBonus = true;
 
     private int currentDay = 0;
     private int funds = 500;
@@ -95,7 +96,16 @@ public class ManagerFinance : MonoBehaviour
     {
         if (ownedStocks > 0 && canTrade)
         {
-            funds += stockPrice;
+            if (skillStatBonus)
+            {
+
+               funds += stockPrice + (int) stockPrice / 2;
+            }
+            else
+            {
+                funds += stockPrice;
+            }
+
             ownedStocks--;
             fundsText.text = "€" + funds;
             ownedStocksText.text = "Owned stocks: " + ownedStocks;
