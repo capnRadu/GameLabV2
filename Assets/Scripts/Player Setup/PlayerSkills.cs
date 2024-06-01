@@ -29,14 +29,14 @@ public class PlayerSkills : NetworkBehaviour
 
     private List<Color> possibleColors = new List<Color>()
     {
-        Color.white,
+        Color.gray,
         Color.red,
         Color.blue,
         Color.green,
         Color.yellow,
         Color.cyan,
         Color.magenta,
-        Color.gray,
+        Color.white,
         Color.black
     };
     private int colorIndex = 0;

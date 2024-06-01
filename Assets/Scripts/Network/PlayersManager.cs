@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class PlayersManager : NetworkBehaviour
     public GameObject currentPlayer;
     public int clientIndex = -1;
     private bool indexCheck = false;
+    [SerializeField] private int numberOfPlayers = 4;
 
     private int gameTurns = 5;
     private float maxPoints = 0;
@@ -30,7 +32,7 @@ public class PlayersManager : NetworkBehaviour
 
     private void Update()
     {
-        if (players.Length != 4) 
+        if (players.Length != numberOfPlayers) 
         {
             players = GameObject.FindGameObjectsWithTag("Player");
 
