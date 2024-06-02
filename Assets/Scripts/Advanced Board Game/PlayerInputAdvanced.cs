@@ -38,6 +38,8 @@ public class PlayerInputAdvanced : NetworkBehaviour
 
     private string[] risks = { "employee", "coin" };
 
+    public bool hasVoted = false;
+
     private void Start()
     {
         gamePiece = GetComponent<GamePiece>();
@@ -262,6 +264,14 @@ public class PlayerInputAdvanced : NetworkBehaviour
     public void NextPlayerServerRpc()
     {
         PlayersManager.Instance.NextPlayerClientRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void VoteMinigameServerRpc(string minigame, ServerRpcParams serverRpcParams = default)
+    {
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
+
+        PlayersManager.Instance.VoteMinigameClientRpc(minigame, clientId);
     }
 
     // KEYBOARD INPUT - UNUSED

@@ -20,7 +20,8 @@ public class DiceRoll : NetworkBehaviour
 
     public void RollDice()
     {
-        if (!playerInputAdvanced.rolledDice && playerInputAdvanced.gamePiece.currentNode != null && playerInputAdvanced == PlayersManager.Instance.currentPlayer.GetComponent<PlayerInputAdvanced>())
+        if (!playerInputAdvanced.rolledDice && playerInputAdvanced.gamePiece.currentNode != null && playerInputAdvanced == PlayersManager.Instance.currentPlayer.GetComponent<PlayerInputAdvanced>()
+            && !PlayersManager.Instance.minigameVotingPanel.activeSelf)
         {
             StartCoroutine(RollTheDice());
         }

@@ -10,7 +10,7 @@ public class ManagerFinance : MonoBehaviour
     WindowGraph windowGraph;
     [NonSerialized] public bool isRoundActive = false;
     [NonSerialized] public bool canTrade = false;
-    [NonSerialized] public bool skillStatBonus = true;
+    [NonSerialized] public bool skillStatBonus = false;
 
     private int currentDay = 0;
     private int funds = 500;
@@ -28,22 +28,50 @@ public class ManagerFinance : MonoBehaviour
     [SerializeField] private GameObject results;
     [SerializeField] private TextMeshProUGUI outcomeFundsText;
 
-    private void Start()
+    MinigamesManager minigamesManager;
+    [SerializeField] public GameObject minigamesPanel;
+
+    private void Awake()
     {
         windowGraph = FindObjectOfType<WindowGraph>();
+
+        minigamesManager = minigamesPanel.GetComponent<MinigamesManager>();
+        if (minigamesManager.playerPrimarySkills.Contains("Finance"))
+        {
+            skillStatBonus = true;
+        }
+    }
+
+    private void OnEnable()
+    {
+        isRoundActive = false;
+        canTrade = false;
+
+        currentDay = 0;
+        funds = 500;
+        ownedStocks = 0;
+        stockPrice = 50;
 
         dayText.text = "Day " + currentDay;
         fundsText.text = "€" + funds;
         ownedStocksText.text = "Owned stocks: " + ownedStocks;
         stockPriceText.text = "Stock price: €" + stockPrice;
         stockStatusColor.color = greenColor;
+
+        foreach (Transform child in transform)
+        {
+            if (child.name != "Background Image" && child.name != "Results")
+            {
+                child.gameObject.SetActive(true);
+            }
+        }
     }
 
     private void Update()
     {
         if (!isRoundActive)
         {
-            if (currentDay != 3)
+            if (currentDay != 2)
             {
                 isRoundActive = true;
                 currentDay++;
@@ -58,19 +86,20 @@ public class ManagerFinance : MonoBehaviour
                     fundsText.text = "€" + funds;
                     ownedStocks = 0;
                     ownedStocksText.text = "Owned stocks: " + ownedStocks;
-
-                    outcomeFundsText.text = "€" + funds;
                 }
 
                 foreach (Transform child in transform)
                 {
                     if (child.name != "Background Image" && child.name != "Results")
                     {
-                        Destroy(child.gameObject);
+                        child.gameObject.SetActive(false);
                     }
                 }
 
+                outcomeFundsText.text = "€" + funds;
+
                 results.SetActive(true);
+                StartCoroutine(EndGame());
             }
         }
     }
@@ -79,6 +108,13 @@ public class ManagerFinance : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         windowGraph.NewRound();
+    }
+
+    private IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(3f);
+        results.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void BuyStock()

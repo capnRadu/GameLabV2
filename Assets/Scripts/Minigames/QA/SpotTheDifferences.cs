@@ -15,7 +15,10 @@ public class SpotTheDifferences : MonoBehaviour
     private void Start()
     {
         minigameManager = FindObjectOfType<ManagerQA>();
+    }
 
+    private void OnEnable()
+    {
         totalDifferences = differenceButtons.Length / 2;
 
         foreach (Button difference in differenceButtons)
