@@ -19,6 +19,7 @@ TagManager:
   - Office Menu
   - BlackTile
   - Image QA
+  - Text Player Turn
   layers:
   - Default
   - TransparentFX

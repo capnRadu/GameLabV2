@@ -52,10 +52,34 @@ public class PlayerOverview : NetworkBehaviour
     public void SkillPointsSetup()
     {
         programmingText.text = $"Programming ({playerSkills.skills["Programming"]})";
+        if (playerSkills.primarySkills.Contains("Programming"))
+        {
+            programmingText.color = Color.red;
+        }
+
         designText.text = $"Design ({playerSkills.skills["Design"]})";
+        if (playerSkills.primarySkills.Contains("Design"))
+        {
+            designText.color = Color.red;
+        }
+
         financeText.text = $"Finance ({playerSkills.skills["Finance"]})";
+        if (playerSkills.primarySkills.Contains("Finance"))
+        {
+            financeText.color = Color.red;
+        }
+
         productManagementText.text = $"Product Management ({playerSkills.skills["Product Management"]})";
+        if (playerSkills.primarySkills.Contains("Product Management"))
+        {
+            productManagementText.color = Color.red;
+        }
+
         qualityAssuranceText.text = $"Quality Assurance ({playerSkills.skills["Quality Assurance"]})";
+        if (playerSkills.primarySkills.Contains("Quality Assurance"))
+        {
+            qualityAssuranceText.color = Color.red;
+        }
 
         /*foreach (var skill in playerSkills.skills)
         {

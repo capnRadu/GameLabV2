@@ -16,6 +16,7 @@ public class PlayersManager : NetworkBehaviour
     public int clientIndex = -1;
     private bool indexCheck = false;
     [SerializeField] private int numberOfPlayers = 4;
+    public List<MapNode> startingNodes = new List<MapNode>();
 
     private int gameTurns = 5;
     private float maxPoints = 0;
@@ -59,6 +60,7 @@ public class PlayersManager : NetworkBehaviour
             {
                 clientIndex = players.Length - 1;
                 currentPlayer = players[0];
+                players[clientIndex].GetComponent<GamePiece>().currentNode = startingNodes[clientIndex];
             }
         }
         else if (clientIndex == 2 && !indexCheck)

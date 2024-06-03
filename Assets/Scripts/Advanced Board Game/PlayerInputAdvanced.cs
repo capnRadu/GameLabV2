@@ -40,6 +40,8 @@ public class PlayerInputAdvanced : NetworkBehaviour
 
     public bool hasVoted = false;
 
+    public TextMeshProUGUI yourTurnText;
+
     private void Start()
     {
         gamePiece = GetComponent<GamePiece>();
@@ -52,6 +54,15 @@ public class PlayerInputAdvanced : NetworkBehaviour
 
         // Dice movement (this is used without the separate dice roll script)
         // UpdateDiceMovement();
+
+        if (PlayersManager.Instance.currentPlayer != null && this == PlayersManager.Instance.currentPlayer.GetComponent<PlayerInputAdvanced>())
+        {
+            yourTurnText.text = "Your Turn";
+        }
+        else
+        {
+            yourTurnText.text = "Not Your Turn";
+        }
     }
 
     private void FixedUpdate()
@@ -85,6 +96,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
         diceRollText = GameObject.FindWithTag("Text Dice Roll").GetComponent<TextMeshProUGUI>();
         coinsText = GameObject.FindWithTag("Text Player Coins").GetComponent<TextMeshProUGUI>();
         employeesText = GameObject.FindWithTag("Text Player Employees").GetComponent<TextMeshProUGUI>();
+        yourTurnText = GameObject.FindWithTag("Text Player Turn").GetComponent<TextMeshProUGUI>();
 
         employeesText.text = $"{employees}/{maxEmployees}";
 

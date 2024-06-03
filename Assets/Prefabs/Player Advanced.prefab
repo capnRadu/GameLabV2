@@ -92,8 +92,9 @@ MonoBehaviour:
   rightDirectionButton: {fileID: 0}
   diceRollText: {fileID: 0}
   cameraPov: {fileID: 4732683388231445035}
-  coinsText: {fileID: 0}
   hireMenu: {fileID: 0}
+  officeMenu: {fileID: 0}
+  hasVoted: 0
 --- !u!114 &6930741456935190574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efacc648841903488924b66009f7b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: 
 --- !u!114 &2259760985558345736
 MonoBehaviour:
   m_ObjectHideFlags: 0
