@@ -20,6 +20,9 @@ public class ManagerQA : MonoBehaviour
     MinigamesManager minigamesManager;
     [SerializeField] public GameObject minigamesPanel;
 
+    [SerializeField] private GameObject specialAbilityPanel;
+    [SerializeField] private GameObject infoPanel;
+
     private void Awake()
     {
         imagesShuffle = imagesDefault.OrderBy(x => UnityEngine.Random.value).ToList();
@@ -28,12 +31,31 @@ public class ManagerQA : MonoBehaviour
         if (minigamesManager.playerPrimarySkills.Contains("Quality Assurance"))
         {
             skillStatBonus = true;
-            hintButton.gameObject.SetActive(true);
+            specialAbilityPanel.SetActive(true);
         }
     }
 
     public void OnEnable()
     {
+        hints = 3;
+
+        infoPanel.SetActive(true);
+        hintButton.gameObject.SetActive(false);
+
+        StartCoroutine(HideInfo());
+    }
+
+    private IEnumerator HideInfo()
+    {
+        yield return new WaitForSeconds(5f);
+
+        if (skillStatBonus)
+        {
+            hintButton.gameObject.SetActive(true);
+        }
+
+        infoPanel.SetActive(false);
+
         imagesShuffle[currentImageIndex].gameObject.SetActive(true);
     }
 

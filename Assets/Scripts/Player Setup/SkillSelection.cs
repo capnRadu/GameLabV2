@@ -26,6 +26,7 @@ public class SkillSelection : NetworkBehaviour
     // [SerializeField] private Button hrButton;
     [SerializeField] private Button productButton;
     [SerializeField] private Button qaButton;
+    [SerializeField] private GameObject infoPanel;
 
     private int selections = 2;
     [SerializeField] private TextMeshProUGUI selectionsText;
@@ -38,7 +39,7 @@ public class SkillSelection : NetworkBehaviour
 
     private void Update()
     {
-        selectionsText.text = $"Choose {selections} skills that best represent your abilities.";
+        selectionsText.text = $"Choose {selections} primary skills that best represent your abilities.";
     }
 
     public void ChooseSkill(string skillName)
@@ -214,6 +215,8 @@ public class SkillSelection : NetworkBehaviour
         if (selections == 0)
         {
             playerSkills.UpdatePlayerPrimarySkills();
+
+            infoPanel.SetActive(false);
 
             GetComponent<Animator>().Play("FadeOut");
 

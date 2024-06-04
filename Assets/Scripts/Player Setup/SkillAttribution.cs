@@ -17,6 +17,8 @@ public class SkillAttribution : NetworkBehaviour
     [NonSerialized] public int attributions = 4;
     [SerializeField] private TextMeshProUGUI attributionsText;
 
+    [SerializeField] private GameObject infoPanel;
+
     private void Awake()
     {
         // playerSkills = GameObject.FindWithTag("Player").GetComponent<PlayerSkills>();
@@ -61,6 +63,8 @@ public class SkillAttribution : NetworkBehaviour
             }
 
             Debug.Log("Max attribute points: " + playerSkills.maxAttributePoints);
+
+            infoPanel.SetActive(false);
 
             GetComponent<Animator>().Play("FadeOut");
 

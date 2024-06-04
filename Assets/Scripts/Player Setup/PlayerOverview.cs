@@ -20,6 +20,10 @@ public class PlayerOverview : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI productManagementText;
     [SerializeField] private TextMeshProUGUI qualityAssuranceText;
 
+    [SerializeField] private GameObject infoPanel1;
+    [SerializeField] private GameObject infoPanel2;
+    [SerializeField] private GameObject infoPanel3;
+
     // [SerializeField] private TextMeshProUGUI playerValueText;
     // private int playerValue;
 
@@ -92,6 +96,9 @@ public class PlayerOverview : NetworkBehaviour
     public void ContinueButton()
     {
         radarMesh.Clear();
+        infoPanel1.SetActive(false);
+        infoPanel2.SetActive(false);
+        infoPanel3.SetActive(false);
         GetComponent<Animator>().Play("FadeOut");
     }
 }

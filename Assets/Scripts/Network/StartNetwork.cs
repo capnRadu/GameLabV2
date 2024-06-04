@@ -17,6 +17,7 @@ public class StartNetwork : MonoBehaviour
     [SerializeField] private TMP_InputField ipInput;
     [SerializeField] private GameObject hostButton;
     [SerializeField] private GameObject clientButton;
+    [SerializeField] private GameObject infoPanel;
 
     private string ipAddress;
     private UnityTransport transport;
@@ -42,6 +43,7 @@ public class StartNetwork : MonoBehaviour
         GetLocalIPAddress();
         waitingText.SetActive(true);
         ipAddressText.gameObject.SetActive(true);
+        infoPanel.SetActive(true);
         hostButton.SetActive(false);
         clientButton.SetActive(false);
         ipInput.gameObject.SetActive(false);

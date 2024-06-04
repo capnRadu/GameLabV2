@@ -8,6 +8,8 @@ using UnityEngine.UI;
 public class ManagerFinance : MonoBehaviour
 {
     WindowGraph windowGraph;
+    [SerializeField] private GameObject windowGraphObject;
+
     [NonSerialized] public bool isRoundActive = false;
     [NonSerialized] public bool canTrade = false;
     [NonSerialized] public bool skillStatBonus = false;
@@ -31,14 +33,18 @@ public class ManagerFinance : MonoBehaviour
     MinigamesManager minigamesManager;
     [SerializeField] public GameObject minigamesPanel;
 
+    [SerializeField] private GameObject specialAbilityPanel;
+    [SerializeField] private GameObject infoPanel;
+
     private void Awake()
     {
-        windowGraph = FindObjectOfType<WindowGraph>();
+        windowGraph = windowGraphObject.GetComponent<WindowGraph>();
 
         minigamesManager = minigamesPanel.GetComponent<MinigamesManager>();
         if (minigamesManager.playerPrimarySkills.Contains("Finance"))
         {
             skillStatBonus = true;
+            specialAbilityPanel.SetActive(true);
         }
     }
 
@@ -58,18 +64,12 @@ public class ManagerFinance : MonoBehaviour
         stockPriceText.text = "Stock price: €" + stockPrice;
         stockStatusColor.color = greenColor;
 
-        foreach (Transform child in transform)
-        {
-            if (child.name != "Background Image" && child.name != "Results")
-            {
-                child.gameObject.SetActive(true);
-            }
-        }
+        StartCoroutine(HideInfo());
     }
 
     private void Update()
     {
-        if (!isRoundActive)
+        if (!isRoundActive && !infoPanel.activeSelf)
         {
             if (currentDay != 2)
             {
@@ -90,7 +90,7 @@ public class ManagerFinance : MonoBehaviour
 
                 foreach (Transform child in transform)
                 {
-                    if (child.name != "Background Image" && child.name != "Results")
+                    if (child.name != "Background Image")
                     {
                         child.gameObject.SetActive(false);
                     }
@@ -100,6 +100,23 @@ public class ManagerFinance : MonoBehaviour
 
                 results.SetActive(true);
                 StartCoroutine(EndGame());
+            }
+        }
+    }
+
+    private IEnumerator HideInfo()
+    {
+        yield return new WaitForSeconds(6f);
+
+        foreach (Transform child in transform)
+        {
+            if (child.name != "Results" && child.name != specialAbilityPanel.name && child.name != infoPanel.name)
+            {
+                child.gameObject.SetActive(true);
+            }
+            else if (child.name == infoPanel.name)
+            {
+                child.gameObject.SetActive(false);
             }
         }
     }
@@ -114,6 +131,13 @@ public class ManagerFinance : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         results.SetActive(false);
+        infoPanel.SetActive(true);
+
+        if (skillStatBonus)
+        {
+            specialAbilityPanel.SetActive(true);
+        }
+
         gameObject.SetActive(false);
     }
 
