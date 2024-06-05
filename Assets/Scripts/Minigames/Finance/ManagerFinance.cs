@@ -58,7 +58,7 @@ public class ManagerFinance : MonoBehaviour
         ownedStocks = 0;
         stockPrice = 50;
 
-        dayText.text = "Day " + currentDay;
+        dayText.text = $"Day {currentDay}/5";
         fundsText.text = "€" + funds;
         ownedStocksText.text = "Owned stocks: " + ownedStocks;
         stockPriceText.text = "Stock price: €" + stockPrice;
@@ -71,11 +71,11 @@ public class ManagerFinance : MonoBehaviour
     {
         if (!isRoundActive && !infoPanel.activeSelf)
         {
-            if (currentDay != 2)
+            if (currentDay != 5)
             {
                 isRoundActive = true;
                 currentDay++;
-                dayText.text = "Day " + currentDay;
+                dayText.text = $"Day {currentDay}/5";
                 StartCoroutine(StartNewRound());
             }
             else

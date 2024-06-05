@@ -12,19 +12,22 @@ public class SpotTheDifferences : MonoBehaviour
     [NonSerialized] public int totalDifferences;
     [NonSerialized] public int foundDifferences = 0;
 
-    private void Start()
+    private void Awake()
     {
         minigameManager = FindObjectOfType<ManagerQA>();
     }
 
     private void OnEnable()
     {
+        foundDifferences = 0;
         totalDifferences = differenceButtons.Length / 2;
 
         foreach (Button difference in differenceButtons)
         {
             difference.onClick.AddListener(() => OnDifferenceFound(difference));
         }
+
+        minigameManager.differences.text = $"{foundDifferences}/{totalDifferences}";
     }
 
     private void OnDifferenceFound(Button difference)
@@ -47,6 +50,8 @@ public class SpotTheDifferences : MonoBehaviour
 
             foundDifferences++;
             Debug.Log("Difference found! " + foundDifferences + " out of " + totalDifferences + " found.");
+
+            minigameManager.differences.text = $"{foundDifferences}/{totalDifferences}";
 
             if (foundDifferences == totalDifferences)
             {

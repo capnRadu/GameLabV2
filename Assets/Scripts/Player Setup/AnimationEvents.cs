@@ -11,6 +11,7 @@ public class AnimationEvents : NetworkBehaviour
     [SerializeField] private GameObject rightButton;
     [SerializeField] private GameObject hireMenu;
     [SerializeField] private GameObject officeMenu;
+    [SerializeField] private GameObject riskMenu;
     [SerializeField] private GameObject diceRollText;
 
     [SerializeField] private GameObject startButton;
@@ -34,6 +35,7 @@ public class AnimationEvents : NetworkBehaviour
         diceRollText.SetActive(true);
         hireMenu.SetActive(true);
         officeMenu.SetActive(true);
+        riskMenu.SetActive(true);
 
         NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>().Setup();
     }

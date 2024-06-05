@@ -20,6 +20,7 @@ TagManager:
   - BlackTile
   - Image QA
   - Text Player Turn
+  - Risk Menu
   layers:
   - Default
   - TransparentFX

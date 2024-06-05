@@ -37,6 +37,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
     [NonSerialized] public bool isOfficeMenuActive = false;
 
     private string[] risks = { "employee", "coin" };
+    [SerializeField] private GameObject riskMenu;
 
     public bool hasVoted = false;
 
@@ -102,6 +103,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
 
         hireMenu = GameObject.FindWithTag("Hire Menu");
         officeMenu = GameObject.FindWithTag("Office Menu");
+        riskMenu = GameObject.FindWithTag("Risk Menu");
 
         upDirectionButton.SetActive(false);
         downDirectionButton.SetActive(false);
@@ -112,6 +114,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
 
         hireMenu.SetActive(false);
         officeMenu.SetActive(false);
+        riskMenu.SetActive(false);
     }
 
     public IEnumerator DiceMovement()
@@ -130,7 +133,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
             yield break;
         }
 
-        while (steps > 0 && gamePiece.currentNode.NeighborsCount().Count == 1 && !isHireMenuActive && !isOfficeMenuActive)
+        while (steps > 0 && gamePiece.currentNode.NeighborsCount().Count == 1 && !isHireMenuActive && !isOfficeMenuActive && !riskMenu.activeSelf)
         {
             MoveToNode(gamePiece.currentNode.NeighborsCount()[0]);
             diceRollText.text = steps.ToString();
@@ -155,6 +158,9 @@ public class PlayerInputAdvanced : NetworkBehaviour
                     {
                         int randomRisk = UnityEngine.Random.Range(0, risks.Length);
 
+                        riskMenu.SetActive(true);
+                        TextMeshProUGUI riskText = riskMenu.transform.Find("Content").GetComponent<TextMeshProUGUI>();
+
                         switch (risks[randomRisk])
                         {
                             case "employee":
@@ -162,12 +168,14 @@ public class PlayerInputAdvanced : NetworkBehaviour
                                 UpdatePlayerEmployeesServerRpc(employees, default);
                                 employeesText.text = $"{employees}/{maxEmployees}";
                                 Debug.Log("You lost 2 employees");
+                                riskText.text = "You lost 2 employees.";
                                 break;
                             case "coin":
                                 coins = (int)(coins / 2);
                                 UpdatePlayerCoinsServerRpc(coins, default);
                                 coinsText.text = coins.ToString();
                                 Debug.Log("You lost half of your coins");
+                                riskText.text = "You lost half of your coins.";
                                 break;
                         }
                     }
@@ -175,7 +183,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
             }
         }
 
-        if (!isHireMenuActive && !isOfficeMenuActive)
+        if (!isHireMenuActive && !isOfficeMenuActive && !riskMenu.activeSelf)
         {
             if (steps != 0)
             {

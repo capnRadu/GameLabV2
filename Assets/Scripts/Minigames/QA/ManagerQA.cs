@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class ManagerQA : MonoBehaviour
     [SerializeField] private List<Image> imagesShuffle = new List<Image>();
     private int currentImageIndex = 0;
     private int rounds = 3;
+    private int currentRound = 1;
 
     [SerializeField] private Button hintButton;
     [NonSerialized] public bool skillStatBonus = false;
@@ -22,6 +24,11 @@ public class ManagerQA : MonoBehaviour
 
     [SerializeField] private GameObject specialAbilityPanel;
     [SerializeField] private GameObject infoPanel;
+    [SerializeField] private GameObject roundDifferencesPanel;
+    [SerializeField] private TextMeshProUGUI round;
+    public TextMeshProUGUI differences;
+
+    [SerializeField] private GameObject skipButton;
 
     private void Awake()
     {
@@ -37,10 +44,23 @@ public class ManagerQA : MonoBehaviour
 
     public void OnEnable()
     {
+        foreach (Transform child in transform)
+        {
+            if (child.name == "Tap(Clone)")
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
         hints = 3;
+
+        currentRound = 1;
+        round.text = $"Round {currentRound}/{rounds}";
 
         infoPanel.SetActive(true);
         hintButton.gameObject.SetActive(false);
+        skipButton.SetActive(false);
+        roundDifferencesPanel.SetActive(false);
 
         StartCoroutine(HideInfo());
     }
@@ -52,9 +72,12 @@ public class ManagerQA : MonoBehaviour
         if (skillStatBonus)
         {
             hintButton.gameObject.SetActive(true);
+            hintButton.GetComponentInChildren<TextMeshProUGUI>().text = $"HINT ({hints})";
         }
 
         infoPanel.SetActive(false);
+        skipButton.SetActive(true);
+        roundDifferencesPanel.SetActive(true);
 
         imagesShuffle[currentImageIndex].gameObject.SetActive(true);
     }
@@ -62,6 +85,9 @@ public class ManagerQA : MonoBehaviour
     public void NextRound()
     {
         rounds--;
+        currentRound++;
+
+        round.text = $"Round {currentRound}/3";
 
         if (currentImageIndex != imagesShuffle.Count - 1)
         {
@@ -100,11 +126,18 @@ public class ManagerQA : MonoBehaviour
             {
                 randomButton.onClick.Invoke();
                 hints--;
+                hintButton.GetComponentInChildren<TextMeshProUGUI>().text = $"HINT ({hints})";
             }
             else
             {
                 GetHint();
             }
         }
+    }
+
+    public void SkipImage()
+    {
+       imagesShuffle[currentImageIndex].gameObject.SetActive(false);
+       NextRound();
     }
 }
