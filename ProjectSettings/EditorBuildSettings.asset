@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Minigame.unity
     guid: 11ebba5d2cbe19e4e8b006fc992492bc
+  - enabled: 1
+    path: Assets/Scenes/Block Puzzle minigame.unity
+    guid: 02aa3babaa9a6c441929ae894846c414
   m_configObjects: {}
