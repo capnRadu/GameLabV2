@@ -165,7 +165,12 @@ public class PlayerInputAdvanced : NetworkBehaviour
                         {
                             case "employee":
                                 employees -= 2;
-                                Mathf.Clamp(employees, 0, 100);
+
+                                if (employees < 0)
+                                {
+                                    employees = 0;
+                                }
+
                                 UpdatePlayerEmployeesServerRpc(employees, default);
                                 employeesText.text = $"{employees}/{maxEmployees}";
                                 Debug.Log("You lost 2 employees");

@@ -299,4 +299,18 @@ public class PlayersManager : NetworkBehaviour
 
         minigameVotingPanel.SetActive(false);
     }
+
+    [ClientRpc]
+    public void UpdateMinigamesPointsClientRpc(float points, ulong clientId)
+    {
+        foreach (GameObject player in players)
+        {
+            if (player.GetComponent<NetworkObject>().OwnerClientId == clientId)
+            {
+                player.GetComponent<PlayerSkills>().minigamesPoints += points;
+
+                Debug.Log(player.GetComponent<PlayerSkills>().playerName + " has " + player.GetComponent<PlayerSkills>().minigamesPoints + " points");
+            }
+        }
+    }
 }

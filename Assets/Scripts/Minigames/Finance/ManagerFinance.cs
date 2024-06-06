@@ -29,12 +29,18 @@ public class ManagerFinance : MonoBehaviour
 
     [SerializeField] private GameObject results;
     [SerializeField] private TextMeshProUGUI outcomeFundsText;
+    private float totalPoints = 0;
+    [SerializeField] private TextMeshProUGUI totalPointsText;
 
     MinigamesManager minigamesManager;
     [SerializeField] public GameObject minigamesPanel;
 
     [SerializeField] private GameObject specialAbilityPanel;
     [SerializeField] private GameObject infoPanel;
+
+    private float obtainedPoints = 0;
+    [SerializeField] private TextMeshProUGUI obtainedPointsText;
+    private bool updatePoints = false;
 
     private void Awake()
     {
@@ -57,12 +63,15 @@ public class ManagerFinance : MonoBehaviour
         funds = 500;
         ownedStocks = 0;
         stockPrice = 50;
+        obtainedPoints = 0;
+        updatePoints = false;
 
         dayText.text = $"Day {currentDay}/5";
         fundsText.text = "€" + funds;
         ownedStocksText.text = "Owned stocks: " + ownedStocks;
         stockPriceText.text = "Stock price: €" + stockPrice;
         stockStatusColor.color = greenColor;
+        obtainedPointsText.text = "Points: " + obtainedPoints;
 
         StartCoroutine(HideInfo());
     }
@@ -96,7 +105,18 @@ public class ManagerFinance : MonoBehaviour
                     }
                 }
 
-                outcomeFundsText.text = "€" + funds;
+                if (!updatePoints)
+                {
+                    updatePoints = true;
+
+                    outcomeFundsText.text = "€" + funds;
+
+                    totalPoints = obtainedPoints + obtainedPoints * minigamesManager.playerSkills.skills["Finance"] / minigamesManager.playerSkills.GetTotalAttributePoints();
+                    totalPoints = Mathf.Round(totalPoints * 10.0f) * 0.1f;
+                    totalPointsText.text = $"Points Won\r\n{obtainedPoints} + {obtainedPoints} x {minigamesManager.playerSkills.skills["Finance"]} (Finance attribute points) / {minigamesManager.playerSkills.GetTotalAttributePoints()} (Total attribute points) = {totalPoints}";
+
+                    minigamesManager.playerSkills.UpdateMinigamesPointsServerRpc(totalPoints);
+                }
 
                 results.SetActive(true);
                 StartCoroutine(EndGame());
@@ -129,7 +149,7 @@ public class ManagerFinance : MonoBehaviour
 
     private IEnumerator EndGame()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         results.SetActive(false);
         infoPanel.SetActive(true);
 
@@ -164,6 +184,12 @@ public class ManagerFinance : MonoBehaviour
             else
             {
                 funds += stockPrice;
+            }
+
+            if (stockStatusColor.color == greenColor)
+            {
+                obtainedPoints += 5;
+                obtainedPointsText.text = "Points: " + obtainedPoints;
             }
 
             ownedStocks--;

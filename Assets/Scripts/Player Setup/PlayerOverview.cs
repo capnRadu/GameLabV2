@@ -13,6 +13,7 @@ public class PlayerOverview : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI companyNameText;
     [SerializeField] private Image playerColorImage;
     [SerializeField] private CanvasRenderer radarMesh;
+    [SerializeField] private TextMeshProUGUI minigamesPointsText;
 
     [SerializeField] private TextMeshProUGUI programmingText;
     [SerializeField] private TextMeshProUGUI designText;
@@ -51,6 +52,11 @@ public class PlayerOverview : NetworkBehaviour
     private void OnEnable()
     {
         SkillPointsSetup();
+
+        if (minigamesPointsText)
+        {
+            minigamesPointsText.text = $"Minigames Points: {playerSkills.minigamesPoints}";
+        }
     }
 
     public void SkillPointsSetup()

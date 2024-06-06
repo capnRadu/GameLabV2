@@ -53,6 +53,9 @@ public class SpotTheDifferences : MonoBehaviour
 
             minigameManager.differences.text = $"{foundDifferences}/{totalDifferences}";
 
+            minigameManager.obtainedPoints += 5;
+            minigameManager.obtainedPointsText.text = "Points: " + minigameManager.obtainedPoints;
+
             if (foundDifferences == totalDifferences)
             {
                 Debug.Log("All differences found!");

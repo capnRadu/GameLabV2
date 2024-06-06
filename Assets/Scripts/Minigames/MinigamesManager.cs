@@ -7,6 +7,7 @@ using UnityEngine;
 public class MinigamesManager : NetworkBehaviour
 {
     PlayerInputAdvanced playerInputAdvanced;
+    [NonSerialized] public PlayerSkills playerSkills;
     [NonSerialized] public List<string> playerPrimarySkills = new List<string>();
 
     public int financeVotes = 0;
@@ -15,7 +16,8 @@ public class MinigamesManager : NetworkBehaviour
     private void Start()
     {
         playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
-        playerPrimarySkills = playerInputAdvanced.GetComponent<PlayerSkills>().primarySkills;
+        playerSkills = playerInputAdvanced.GetComponent<PlayerSkills>();
+        playerPrimarySkills = playerSkills.primarySkills;
     }
 
     public void VoteMinigame(string minigame)

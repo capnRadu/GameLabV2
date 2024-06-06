@@ -30,6 +30,12 @@ public class ManagerQA : MonoBehaviour
 
     [SerializeField] private GameObject skipButton;
 
+    private float totalPoints = 0;
+    [SerializeField] private TextMeshProUGUI totalPointsText;
+    [NonSerialized] public float obtainedPoints = 0;
+    public TextMeshProUGUI obtainedPointsText;
+    [SerializeField] private GameObject pointsWonPanel;
+
     private void Awake()
     {
         imagesShuffle = imagesDefault.OrderBy(x => UnityEngine.Random.value).ToList();
@@ -57,6 +63,9 @@ public class ManagerQA : MonoBehaviour
         currentRound = 1;
         round.text = $"Round {currentRound}/{rounds}";
 
+        obtainedPoints = 0;
+        obtainedPointsText.text = "Points: " + obtainedPoints;
+
         infoPanel.SetActive(true);
         hintButton.gameObject.SetActive(false);
         skipButton.SetActive(false);
@@ -78,6 +87,8 @@ public class ManagerQA : MonoBehaviour
         infoPanel.SetActive(false);
         skipButton.SetActive(true);
         roundDifferencesPanel.SetActive(true);
+        round.gameObject.SetActive(true);
+        obtainedPointsText.gameObject.SetActive(true);
 
         imagesShuffle[currentImageIndex].gameObject.SetActive(true);
     }
@@ -112,7 +123,22 @@ public class ManagerQA : MonoBehaviour
         if (rounds == 0)
         {
             rounds = 3;
-            gameObject.SetActive(false);
+
+            totalPoints = obtainedPoints + obtainedPoints * minigamesManager.playerSkills.skills["Quality Assurance"] / minigamesManager.playerSkills.GetTotalAttributePoints();
+            totalPoints = Mathf.Round(totalPoints * 10.0f) * 0.1f;
+            totalPointsText.text = $"{obtainedPoints} + {obtainedPoints} x {minigamesManager.playerSkills.skills["Quality Assurance"]} (Quality Assurance attribute points) / {minigamesManager.playerSkills.GetTotalAttributePoints()} (Total attribute points) = {totalPoints}";
+
+            minigamesManager.playerSkills.UpdateMinigamesPointsServerRpc(totalPoints);
+
+            pointsWonPanel.SetActive(true);
+            obtainedPointsText.gameObject.SetActive(false);
+            roundDifferencesPanel.SetActive(false);
+            round.gameObject.SetActive(false);
+            hintButton.gameObject.SetActive(false);
+            skipButton.SetActive(false);
+            specialAbilityPanel.SetActive(false);
+
+            StartCoroutine(EndGame());
         }
     }
 
@@ -125,6 +151,10 @@ public class ManagerQA : MonoBehaviour
             if (randomButton.interactable)
             {
                 randomButton.onClick.Invoke();
+
+                obtainedPoints -= 5;
+                obtainedPointsText.text = "Points: " + obtainedPoints;
+
                 hints--;
                 hintButton.GetComponentInChildren<TextMeshProUGUI>().text = $"HINT ({hints})";
             }
@@ -139,5 +169,20 @@ public class ManagerQA : MonoBehaviour
     {
        imagesShuffle[currentImageIndex].gameObject.SetActive(false);
        NextRound();
+    }
+
+    private IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(5f);
+
+        pointsWonPanel.SetActive(false);
+        infoPanel.SetActive(true);
+
+        if (skillStatBonus)
+        {
+            specialAbilityPanel.SetActive(true);
+        }
+
+        gameObject.SetActive(false);
     }
 }

@@ -1,7 +1,9 @@
+using Mono.Cecil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -40,6 +42,8 @@ public class PlayerSkills : NetworkBehaviour
         Color.black
     };
     private int colorIndex = 0;
+
+    [NonSerialized] public float minigamesPoints = 0;
 
     public void SetPlayerName(string name)
     {
@@ -143,5 +147,25 @@ public class PlayerSkills : NetworkBehaviour
         ulong clientId = serverRpcParams.Receive.SenderClientId;
 
         PlayersManager.Instance.UpdatePlayerPrimarySkillsClientRpc(primarySkill, clientId);
+    }
+
+    public int GetTotalAttributePoints()
+    {
+        int totalAttributePoints = 0;
+
+        foreach (var skill in skills)
+        {
+            totalAttributePoints += skill.Value;
+        }
+
+        return totalAttributePoints;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdateMinigamesPointsServerRpc(float points, ServerRpcParams serverRpcParams = default)
+    {
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
+
+        PlayersManager.Instance.UpdateMinigamesPointsClientRpc(points, clientId);
     }
 }
