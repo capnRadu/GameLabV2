@@ -26,7 +26,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
 
     [NonSerialized] public int coins = 0;
     [NonSerialized] public int employees = 0;
-    [NonSerialized] public int maxEmployees = 3;
+    [NonSerialized] public int maxEmployees = 4;
     [NonSerialized] public TextMeshProUGUI coinsText;
     [NonSerialized] public TextMeshProUGUI employeesText;
 
@@ -165,6 +165,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
                         {
                             case "employee":
                                 employees -= 2;
+                                Mathf.Clamp(employees, 0, 100);
                                 UpdatePlayerEmployeesServerRpc(employees, default);
                                 employeesText.text = $"{employees}/{maxEmployees}";
                                 Debug.Log("You lost 2 employees");
@@ -256,7 +257,7 @@ public class PlayerInputAdvanced : NetworkBehaviour
         }
         else if (gamePiece.currentNode.tag == "RedTile")
         {
-            coins -= 3;
+            coins -= 1;
         }
 
         coins = Mathf.Clamp(coins, 0, 1000000);

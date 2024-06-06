@@ -32,11 +32,11 @@ public class EmployeeSkills : NetworkBehaviour
         playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
         playerSkills = playerInputAdvanced.GetComponent<PlayerSkills>();
 
-        skills["Programming"] = UnityEngine.Random.Range(1, 11);
-        skills["Design"] = UnityEngine.Random.Range(1, 11);
-        skills["Finance"] = UnityEngine.Random.Range(1, 11);
-        skills["Product Management"] = UnityEngine.Random.Range(1, 11);
-        skills["Quality Assurance"] = UnityEngine.Random.Range(1, 11);
+        skills["Programming"] = UnityEngine.Random.Range(1, 4);
+        skills["Design"] = UnityEngine.Random.Range(1, 4);
+        skills["Finance"] = UnityEngine.Random.Range(1, 4);
+        skills["Product Management"] = UnityEngine.Random.Range(1, 4);
+        skills["Quality Assurance"] = UnityEngine.Random.Range(1, 4);
 
         foreach (var skill in skills)
         {
@@ -55,25 +55,17 @@ public class EmployeeSkills : NetworkBehaviour
             skillSum += skill.Value;
         }
 
-        if (skillSum < 10)
-        {
-            hireCost = 1;
-        }
-        else if (skillSum < 20)
-        {
-            hireCost = 2;
-        }
-        else if (skillSum < 30)
+        if (skillSum < 7)
         {
             hireCost = 3;
         }
-        else if (skillSum < 40)
+        else if (skillSum < 12)
         {
-            hireCost = 4;
+            hireCost = 6;
         }
         else
         {
-            hireCost = 5;
+            hireCost = 8;
         }
 
         hireCostText.text = $"Hire ({hireCost} coins)";
