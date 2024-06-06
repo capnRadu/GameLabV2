@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -8,21 +9,25 @@ public class HireMenu : NetworkBehaviour
     PlayerInputAdvanced playerInputAdvanced;
 
     [SerializeField] private GameObject employeePrefab;
+    private GameObject[] employees = new GameObject[5];
     private float posY = 170f;
     private int spacing = 90;
 
-    private void Start()
+    private void Awake()
     {
         // playerInputAdvanced = GameObject.FindWithTag("Player").GetComponent<PlayerInputAdvanced>();
         // playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
         playerInputAdvanced = NetworkManager.LocalClient.PlayerObject.GetComponent<PlayerInputAdvanced>();
+    }
 
+    private void OnEnable()
+    {
         InstantiateEmployees(employeePrefab);
     }
 
     private void InstantiateEmployees(GameObject employeePrefab)
     {
-        for (int i = 0; i < 5; i++)
+        /*for (int i = 0; i < 5; i++)
         {
             GameObject employee = Instantiate(employeePrefab, new Vector3(0, posY, 0), Quaternion.identity);
             employee.transform.SetParent(gameObject.transform);
@@ -31,6 +36,20 @@ public class HireMenu : NetworkBehaviour
             employee.transform.localRotation = Quaternion.identity;
 
             posY -= spacing;
+        }*/
+
+        foreach (GameObject employee in employees)
+        {
+            if (employee == null)
+            {
+                GameObject employeeInstance = Instantiate(employeePrefab, new Vector3(0, posY - (spacing * Array.IndexOf(employees, employee)), 0), Quaternion.identity);
+                employeeInstance.transform.SetParent(gameObject.transform);
+                employeeInstance.transform.localPosition = new Vector3(0, posY - (spacing * Array.IndexOf(employees, employee)), 0);
+                employeeInstance.transform.localScale = new Vector3(1, 1, 1);
+                employeeInstance.transform.localRotation = Quaternion.identity;
+
+                employees[Array.IndexOf(employees, employee)] = employeeInstance;
+            }
         }
     }
 

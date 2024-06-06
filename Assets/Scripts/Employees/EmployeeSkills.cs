@@ -22,6 +22,7 @@ public class EmployeeSkills : NetworkBehaviour
 
     [SerializeField] private TextMeshProUGUI employeeName;
     private string[] names = { "Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Hank", "Ivy", "Jack" };
+    private string[] surnames = { "S.", "T.", "U.", "V.", "W.", "A.", "B." };
 
     private int hireCost;
     [SerializeField] private TextMeshProUGUI hireCostText;
@@ -45,7 +46,7 @@ public class EmployeeSkills : NetworkBehaviour
             }
         }
 
-        employeeName.text = names[UnityEngine.Random.Range(0, names.Length)];
+        employeeName.text = names[UnityEngine.Random.Range(0, names.Length)] + " " + surnames[UnityEngine.Random.Range(0, surnames.Length)];
 
         int skillSum = 0;
 
