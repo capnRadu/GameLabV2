@@ -49,6 +49,20 @@ public class HireMenu : NetworkBehaviour
             playerInputAdvanced.NextPlayerServerRpc();
         }
 
+        foreach (var radarMesh in GameObject.FindObjectsOfType<CanvasRenderer>())
+        {
+            if (radarMesh.name == "Radar Mesh")
+            {
+                radarMesh.Clear();
+            }
+        }
+
+
+        if (GameObject.Find("Employee Overview"))
+        {
+            GameObject.Find("Employee Overview").SetActive(false);
+        }
+
         gameObject.SetActive(false);
     }
 }

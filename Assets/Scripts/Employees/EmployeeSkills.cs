@@ -115,4 +115,12 @@ public class EmployeeSkills : NetworkBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void CloseOverviews()
+    {
+        if (GameObject.Find("Employee Overview"))
+        {
+            GameObject.Find("Employee Overview").SetActive(false);
+        }
+    }
 }
