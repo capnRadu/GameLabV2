@@ -15,18 +15,17 @@ public class SpotTheDifferences : MonoBehaviour
     private void Awake()
     {
         minigameManager = FindObjectOfType<ManagerQA>();
+
+        foreach (Button difference in differenceButtons)
+        {
+            difference.onClick.AddListener(() => OnDifferenceFound(difference));
+        }
     }
 
     private void OnEnable()
     {
         foundDifferences = 0;
         totalDifferences = differenceButtons.Length / 2;
-
-        foreach (Button difference in differenceButtons)
-        {
-            difference.onClick.AddListener(() => OnDifferenceFound(difference));
-        }
-
         minigameManager.differences.text = $"{foundDifferences}/{totalDifferences}";
     }
 
@@ -67,6 +66,14 @@ public class SpotTheDifferences : MonoBehaviour
     private IEnumerator StartNextRound()
     {
         yield return new WaitForSeconds(2f);
+
+        foreach (Button difference in differenceButtons)
+        {
+            difference.interactable = true;
+            difference.GetComponent<Animator>().enabled = false;
+
+            difference.GetComponent<Image>().color = new Color(difference.GetComponent<Image>().color.r, difference.GetComponent<Image>().color.g, difference.GetComponent<Image>().color.b, 0);
+        }
 
         gameObject.SetActive(false);
         minigameManager.NextRound();

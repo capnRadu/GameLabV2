@@ -6,6 +6,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayersManager : NetworkBehaviour
 {
@@ -18,9 +19,8 @@ public class PlayersManager : NetworkBehaviour
     [SerializeField] private int numberOfPlayers = 4;
     public List<MapNode> startingNodes = new List<MapNode>();
 
-    private int gameTurns = 5;
-    private float maxPoints = 0;
-    private string winner = null;
+    private int gameTurns = 15;
+    public TextMeshProUGUI roundsLeftText;
 
     MinigamesManager minigamesManager;
 
@@ -31,6 +31,19 @@ public class PlayersManager : NetworkBehaviour
     public GameObject financeMinigameCanvas;
     public GameObject qaMinigameCanvas;
     private int currentMinigameIndex = -1;
+
+    public GameObject leaderboardPanel;
+    public GameObject playerPanelPrefab;
+    private float posY = 253f;
+    private int spacing = 170;
+
+    private struct PlayerStats
+    {
+        public string playerName;
+        public float minigamesPoints;
+        public float nonPrimaryAttributePoints;
+        public float totalPoints;
+    }
 
     private void Awake()
     {
@@ -48,6 +61,8 @@ public class PlayersManager : NetworkBehaviour
     private void Start()
     {
         minigamesManager = minigameVotingPanel.GetComponent<MinigamesManager>();
+
+        roundsLeftText.text = "Rounds Left: " + gameTurns;
     }
 
     private void Update()
@@ -96,16 +111,20 @@ public class PlayersManager : NetworkBehaviour
         if (System.Array.IndexOf(players, currentPlayer) % players.Length == 0 && gameTurns > 0)
         {
             gameTurns--;
+            roundsLeftText.text = "Rounds Left: " + gameTurns;
             minigameVotingPanel.SetActive(true);
             Debug.Log(gameTurns);
         }
         
         if (gameTurns == 0)
         {
+            leaderboardPanel.SetActive(true);
+
+            List<PlayerStats> playerStats = new List<PlayerStats>();
+
             foreach (GameObject player in players)
             {
                 PlayerSkills playerSkills = player.GetComponent<PlayerSkills>();
-                PlayerInputAdvanced playerInputAdvanced = player.GetComponent<PlayerInputAdvanced>();
 
                 float skillPoints = 0;
 
@@ -117,19 +136,38 @@ public class PlayersManager : NetworkBehaviour
                     }
                 }
 
-                Debug.LogWarning($"{playerInputAdvanced.employees}  {playerInputAdvanced.coins}  {skillPoints}");
+                float totalPoints = 0.5f * skillPoints + 0.5f * playerSkills.minigamesPoints;
+                totalPoints = Mathf.Round(totalPoints * 10.0f) * 0.1f;
 
-                float totalPoints = 0.5f * playerInputAdvanced.employees + 0.35f * skillPoints + 0.15f * playerInputAdvanced.coins;
-                Debug.Log(playerSkills.playerName + " has " + totalPoints + " points");
-
-                if (totalPoints > maxPoints)
+                PlayerStats stats = new PlayerStats
                 {
-                    maxPoints = totalPoints;
-                    winner = playerSkills.playerName;
-                }
+                    playerName = playerSkills.playerName,
+                    minigamesPoints = playerSkills.minigamesPoints,
+                    nonPrimaryAttributePoints = skillPoints,
+                    totalPoints = totalPoints
+                };
+
+                playerStats.Add(stats);
             }
 
-            Debug.Log("The winner is " + winner);
+            playerStats = playerStats.OrderByDescending(player => player.totalPoints).ToList();
+
+            foreach (PlayerStats player in playerStats)
+            {
+                GameObject playerPanel = Instantiate(playerPanelPrefab, new Vector3(0, posY, 0), Quaternion.identity);
+                playerPanel.transform.SetParent(leaderboardPanel.transform);
+                playerPanel.transform.localPosition = new Vector3(0, posY, 0);
+                playerPanel.transform.localScale = new Vector3(1, 1, 1);
+                playerPanel.transform.localRotation = Quaternion.identity;
+
+                int ranking = playerStats.IndexOf(player) + 1;
+
+                playerPanel.transform.Find("Ranking Text").GetComponent<TextMeshProUGUI>().text = $"{ranking}) {player.playerName} : {player.totalPoints} final points";
+                playerPanel.transform.Find("Minigames Points Text").GetComponent<TextMeshProUGUI>().text = $"Minigames points (50%): {player.minigamesPoints}";
+                playerPanel.transform.Find("Attribute Points Text").GetComponent<TextMeshProUGUI>().text = $"Total attribute points (50%): {player.nonPrimaryAttributePoints}";
+
+                posY -= spacing;
+            }
         }
     }
 
@@ -312,5 +350,10 @@ public class PlayersManager : NetworkBehaviour
                 Debug.Log(player.GetComponent<PlayerSkills>().playerName + " has " + player.GetComponent<PlayerSkills>().minigamesPoints + " points");
             }
         }
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

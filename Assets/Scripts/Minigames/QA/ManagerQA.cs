@@ -152,9 +152,6 @@ public class ManagerQA : MonoBehaviour
             {
                 randomButton.onClick.Invoke();
 
-                obtainedPoints -= 5;
-                obtainedPointsText.text = "Points: " + obtainedPoints;
-
                 hints--;
                 hintButton.GetComponentInChildren<TextMeshProUGUI>().text = $"HINT ({hints})";
             }
