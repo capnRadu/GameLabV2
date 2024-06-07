@@ -16,7 +16,7 @@ public class BlockPuzzleScript : MonoBehaviour
     {
         _camera = Camera.main;
 
-        //Shuffle();
+        Shuffle();
     }
 
     
