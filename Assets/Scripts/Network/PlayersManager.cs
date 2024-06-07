@@ -27,9 +27,11 @@ public class PlayersManager : NetworkBehaviour
     public GameObject minigameVotingPanel;
     public TextMeshProUGUI financeTotalVotesText;
     public TextMeshProUGUI qaTotalVotesText;
+    public TextMeshProUGUI programmingTotalVotesText;
 
     public GameObject financeMinigameCanvas;
     public GameObject qaMinigameCanvas;
+    public GameObject programmingMinigameCanvas;
     private int currentMinigameIndex = -1;
 
     public GameObject leaderboardPanel;
@@ -263,7 +265,7 @@ public class PlayersManager : NetworkBehaviour
             }
         }
 
-        if (minigamesManager.financeVotes + minigamesManager.qaVotes != players.Length && !invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted)
+        if (minigamesManager.financeVotes + minigamesManager.qaVotes + minigamesManager.programmingVotes != players.Length && !invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted)
         {
             switch (minigame)
             {
@@ -277,48 +279,64 @@ public class PlayersManager : NetworkBehaviour
                     qaTotalVotesText.text = $"Vote ({minigamesManager.qaVotes} votes)";
                     Debug.Log(invokingPlayer.GetComponent<PlayerSkills>().playerName + " voted for QA minigame");
                     break;
+                case "programming":
+                    minigamesManager.programmingVotes++;
+                    programmingTotalVotesText.text = $"Vote ({minigamesManager.programmingVotes} votes)";
+                    Debug.Log(invokingPlayer.GetComponent<PlayerSkills>().playerName + " voted for Programming minigame");
+                    break;
             }
 
             invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted = true;
         }
 
-        if (minigamesManager.financeVotes + minigamesManager.qaVotes == players.Length && invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted)
+        if (minigamesManager.financeVotes + minigamesManager.qaVotes + minigamesManager.programmingVotes == players.Length && invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted)
         {
             foreach (GameObject player in players)
             {
                 player.GetComponent<PlayerInputAdvanced>().hasVoted = false;
             }
 
-            if (minigamesManager.financeVotes > minigamesManager.qaVotes)
-            {
-                currentMinigameIndex = 0;
-                StartCoroutine(StartMinigame(financeMinigameCanvas));
-            }
-            else if (minigamesManager.financeVotes < minigamesManager.qaVotes)
-            {
-                currentMinigameIndex = 1;
-                StartCoroutine(StartMinigame(qaMinigameCanvas));
-            }
-            else
-            {
-                var randomVote = Random.Range(0, 2);
-                StartMinigameClientRpc(currentMinigameIndex, randomVote);
-            }
+            int selectedMinigameIndex = DetermineMinigameIndex();
+            StartMinigameClientRpc(selectedMinigameIndex);
         }
     }
 
-    [ClientRpc]
-    private void StartMinigameClientRpc(int currentMinigameIndex, int votingResult)
+    private int DetermineMinigameIndex()
     {
-        currentMinigameIndex = votingResult;
+        int[] votes = { minigamesManager.financeVotes, minigamesManager.qaVotes, minigamesManager.programmingVotes };
+        int maxVotes = votes.Max();
 
-        switch (currentMinigameIndex)
+        List<int> indicesWithMaxVotes = new List<int>();
+
+        for (int i = 0; i < votes.Length; i++)
+        {
+            if (votes[i] == maxVotes)
+            {
+                indicesWithMaxVotes.Add(i);
+            }
+        }
+
+        if (indicesWithMaxVotes.Count > 1)
+        {
+            return indicesWithMaxVotes[Random.Range(0, indicesWithMaxVotes.Count)];
+        }
+
+        return indicesWithMaxVotes[0];
+    }
+
+    [ClientRpc]
+    private void StartMinigameClientRpc(int minigameIndex)
+    {
+        switch (minigameIndex)
         {
             case 0:
                 StartCoroutine(StartMinigame(financeMinigameCanvas));
                 break;
             case 1:
                 StartCoroutine(StartMinigame(qaMinigameCanvas));
+                break;
+            case 2:
+                StartCoroutine(StartMinigame(programmingMinigameCanvas));
                 break;
         }
     }
@@ -331,9 +349,11 @@ public class PlayersManager : NetworkBehaviour
 
         financeTotalVotesText.text = "Vote (0 votes)";
         qaTotalVotesText.text = "Vote (0 votes)";
+        programmingTotalVotesText.text = "Vote (0 votes)";
 
         minigamesManager.financeVotes = 0;
         minigamesManager.qaVotes = 0;
+        minigamesManager.programmingVotes = 0;
 
         minigameVotingPanel.SetActive(false);
     }

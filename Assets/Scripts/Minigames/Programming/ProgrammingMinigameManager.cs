@@ -4,429 +4,164 @@ using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.UI;
+using System.Linq;
+using System;
 
 public class ProgrammingMinigameManager : MonoBehaviour
 {
-    public GameObject[] canvases;
-    private GameObject currentCanvas;
+    [SerializeField] private List<GameObject> questions = new List<GameObject>();
+    [SerializeField] private List<GameObject> shuffledQuestions = new List<GameObject>();
+    private int currentQuestionIndex = 0;
+    private int rounds = 3;
+    private int currentRound = 1;
 
-    [Header("Minigame 1")]
-    [SerializeField] private Canvas canvas1;
-    [SerializeField] private Canvas canvas2;
-    [SerializeField] private Canvas canvas3;
+    MinigamesManager minigamesManager;
+    [SerializeField] public GameObject minigamesPanel;
 
-    [Header("Minigame 2")]
-    [SerializeField] private Canvas canvas4;
-    [SerializeField] private Canvas canvas5;
-    [SerializeField] private Canvas canvas6;
+    [NonSerialized] public bool skillStatBonus = false;
+    [SerializeField] private GameObject specialAbilityPanel;
 
-    [Header("Minigame 3")]
-    [SerializeField] private Canvas canvas7;
-    [SerializeField] private Canvas canvas8;
-    [SerializeField] private Canvas canvas9;
+    [SerializeField] private GameObject infoPanel;
+    [SerializeField] private TextMeshProUGUI roundsText;
+    [SerializeField] private TextMeshProUGUI pointsText;
+    private float obtainedPoints = 0;
+    private float totalPoints = -1;
 
-    [Header("Minigame 4")]
-    [SerializeField] private Canvas canvas10;
-    [SerializeField] private Canvas canvas11;
-    [SerializeField] private Canvas canvas12;
-    
-    void Start()
+    [SerializeField] private GameObject pointsWonPanel;
+    [SerializeField] private TextMeshProUGUI pointsWonText;
+
+    private void Awake()
     {
-        DeactivateAllCanvases();
-    }
+        shuffledQuestions = questions.OrderBy(x => UnityEngine.Random.value).ToList();
 
-    void Update()
-    {
-
-        if (Input.GetKeyDown(KeyCode.G))
+        minigamesManager = minigamesPanel.GetComponent<MinigamesManager>();
+        if (minigamesManager.playerPrimarySkills.Contains("Programming"))
         {
-            ActivateRandomCanvas();
+            skillStatBonus = true;
+            specialAbilityPanel.SetActive(true);
         }
     }
 
-    void ActivateRandomCanvas()
+    private void OnEnable()
     {
-        DeactivateCanvas(currentCanvas);
+        currentRound = 1;
+        obtainedPoints = 0;
 
-        if (canvases.Length > 0)
+        roundsText.text = $"Round {currentRound}/{rounds}";
+        pointsText.text = $"Points: {obtainedPoints}";
+
+        infoPanel.SetActive(true);
+        roundsText.gameObject.SetActive(false);
+        pointsText.gameObject.SetActive(false);
+        pointsWonPanel.SetActive(false);
+
+        StartCoroutine(HideInfoPanel());
+    }
+
+    private IEnumerator HideInfoPanel()
+    {
+        yield return new WaitForSeconds(5f);
+
+        infoPanel.SetActive(false);
+        roundsText.gameObject.SetActive(true);
+        pointsText.gameObject.SetActive(true);
+
+        shuffledQuestions[currentQuestionIndex].SetActive(true);
+        
+        if (skillStatBonus && totalPoints == -1)
         {
-            int randomIndex = Random.Range(0, canvases.Length);
-            currentCanvas = canvases[randomIndex];
-            RemoveCanvas(randomIndex);
-            ActivateCanvas(currentCanvas);
+            SkillStatBonus(shuffledQuestions[currentQuestionIndex]);
+        }
+    }
+
+    public void ChooseAnswer(bool correctAnswer)
+    {
+        if (correctAnswer)
+        {
+            Debug.Log("Correct answer!");
+            obtainedPoints += 15;
+            pointsText.text = $"Points: {obtainedPoints}";
         }
         else
         {
-            Debug.Log("No canvas!");
+            Debug.Log("Incorrect answer!");
         }
-    }
 
-    void ToggleCanvas(GameObject canvas)
-    {
+        shuffledQuestions[currentQuestionIndex].SetActive(false);
 
-        if (canvas != null)
+        if (currentQuestionIndex < shuffledQuestions.Count - 1)
         {
-            canvas.SetActive(!canvas.activeSelf);
+            currentQuestionIndex++;
+            shuffledQuestions[currentQuestionIndex].SetActive(true);
         }
-    }
-
-    void ActivateCanvas(GameObject canvas)
-    {
-
-        if (canvas != null)
+        else
         {
-            canvas.SetActive(true);
+            currentQuestionIndex = 0;
+            shuffledQuestions = questions.OrderBy(x => UnityEngine.Random.value).ToList();
+            shuffledQuestions[currentQuestionIndex].SetActive(true);
         }
-    }
 
-    void DeactivateCanvas(GameObject canvas)
-    {
-
-        if (canvas != null)
+        if (skillStatBonus)
         {
-            canvas.SetActive(false);
+            SkillStatBonus(shuffledQuestions[currentQuestionIndex]);
         }
-    }
 
-    void DeactivateAllCanvases()
-    {
-
-        foreach (var canvas in canvases)
+        if (currentRound < rounds)
         {
-            canvas.SetActive(false);
+            currentRound++;
+            roundsText.text = $"Round {currentRound}/{rounds}";
         }
-    }
-
-    void RemoveCanvas(int index)
-    {
-
-        if (index >= 0 && index < canvases.Length)
+        else
         {
-            var tempList = new List<GameObject>(canvases);
-            tempList.RemoveAt(index);
-            canvases = tempList.ToArray();
+            Debug.Log("All questions answered!");
+            shuffledQuestions[currentQuestionIndex].SetActive(false);
+
+            roundsText.gameObject.SetActive(false);
+            pointsText.gameObject.SetActive(false);
+            specialAbilityPanel.SetActive(false);
+            pointsWonPanel.SetActive(true);
+
+            totalPoints = obtainedPoints + obtainedPoints * minigamesManager.playerSkills.skills["Programming"] / minigamesManager.playerSkills.GetTotalAttributePoints();
+            totalPoints = Mathf.Round(totalPoints * 10.0f) * 0.1f;
+            pointsWonText.text = $"{obtainedPoints} + {obtainedPoints} x {minigamesManager.playerSkills.skills["Programming"]} (Programming attribute points) / {minigamesManager.playerSkills.GetTotalAttributePoints()} (Total attribute points) = {totalPoints}";
+
+            minigamesManager.playerSkills.UpdateMinigamesPointsServerRpc(totalPoints);
+
+            StartCoroutine(EndGame());
         }
     }
 
-
-    public void Canva1Button1()
+    private IEnumerator EndGame()
     {
-        Debug.Log("Wrong");
-        canvas1.gameObject.SetActive(false);
-        canvas2.gameObject.SetActive(true);
+        yield return new WaitForSeconds(5f);
 
-    }
-
-    public void Canva1Button2()
-    {
-        Debug.Log("Wrong");
-        canvas1.gameObject.SetActive(false);
-        canvas2.gameObject.SetActive(true);
+        if (skillStatBonus)
+        {
+            specialAbilityPanel.SetActive(true);
+        }
+        
+        gameObject.SetActive(false);
     }
 
-    public void Canva1Button3()
+    private void SkillStatBonus(GameObject question)
     {
-        Debug.Log("Correct");
-        canvas1.gameObject.SetActive(false);
-        canvas2.gameObject.SetActive(true);
-    }
+        foreach (Transform child in question.transform)
+        {
+            child.gameObject.SetActive(true);
+        }
 
-    public void Canva1Button4()
-    {
-        Debug.Log("Wrong");
-        canvas1.gameObject.SetActive(false);
-        canvas2.gameObject.SetActive(true);
-    }
+        List<AnswerButton> answerButtons = question.GetComponentsInChildren<AnswerButton>().Where(x => x.correctAnswer == false).ToList();
 
-    public void Canva2Button1()
-    {
-        Debug.Log("Correct");
-        canvas2.gameObject.SetActive(false);
-        canvas3.gameObject.SetActive(true);
-    }
+        int randomIndex = UnityEngine.Random.Range(0, answerButtons.Count);
+        int randomIndex2 = randomIndex;
 
-    public void Canva2Button2()
-    {
-        Debug.Log("Wrong");
-        canvas2.gameObject.SetActive(false);
-        canvas3.gameObject.SetActive(true);
-    }
+        do
+        {
+            randomIndex2 = UnityEngine.Random.Range(0, answerButtons.Count);
+        }
+        while (randomIndex2 == randomIndex);
 
-    public void Canva2Button3()
-    {
-        Debug.Log("Wrong");
-        canvas2.gameObject.SetActive(false);
-        canvas3.gameObject.SetActive(true);
-    }
-
-    public void Canva2Button4()
-    {
-        Debug.Log("Wrong");
-        canvas2.gameObject.SetActive(false);
-        canvas3.gameObject.SetActive(true);
-    }
-
-    public void Canva3Button1()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva3Button2()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva3Button3()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva3Button4()
-    {
-        Debug.Log("Correct");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva4Button1()
-    {
-        Debug.Log("Wrong");
-        canvas4.gameObject.SetActive(false);
-        canvas5.gameObject.SetActive(true);
-    }
-
-    public void Canva4Button2()
-    {
-        Debug.Log("Wrong");
-        canvas4.gameObject.SetActive(false);
-        canvas5.gameObject.SetActive(true);
-    }
-
-    public void Canva4Button3()
-    {
-        Debug.Log("Correct");
-        canvas4.gameObject.SetActive(false);
-        canvas5.gameObject.SetActive(true);
-    }
-
-    public void Canva4Button4()
-    {
-        Debug.Log("Wrong");
-        canvas4.gameObject.SetActive(false);
-        canvas5.gameObject.SetActive(true);
-    }
-
-    public void Canva5Button1()
-    {
-        Debug.Log("Correct");
-        canvas5.gameObject.SetActive(false);
-        canvas6.gameObject.SetActive(true);
-    }
-
-    public void Canva5Button2()
-    {
-        Debug.Log("Wrong");
-        canvas5.gameObject.SetActive(false);
-        canvas6.gameObject.SetActive(true);
-    }
-    public void Canva5Button3()
-    {
-        Debug.Log("Wrong");
-        canvas5.gameObject.SetActive(false);
-        canvas6.gameObject.SetActive(true);
-    }
-    public void Canva5Button4()
-    {
-        Debug.Log("Wrong");
-        canvas5.gameObject.SetActive(false);
-        canvas6.gameObject.SetActive(true);
-    }
-
-    public void Canva6Button1()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-    public void Canva6Button2()
-    {
-        Debug.Log("Correct");
-        //finish mini game & deactivate canvas
-    }
-    public void Canva6Button3()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-    public void Canva6Button4()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-    public void Canva7Button1()
-    {
-        Debug.Log("Wrong");
-        canvas7.gameObject.SetActive(false);
-        canvas8.gameObject.SetActive(true);
-
-    }
-
-    public void Canva7Button2()
-    {
-        Debug.Log("Wrong");
-        canvas7.gameObject.SetActive(false);
-        canvas8.gameObject.SetActive(true);
-    }
-
-    public void Canva7Button3()
-    {
-        Debug.Log("Wrong");
-        canvas7.gameObject.SetActive(false);
-        canvas8.gameObject.SetActive(true);
-    }
-    public void Canva7Button4()
-    {
-        Debug.Log("Correct");
-        canvas7.gameObject.SetActive(false);
-        canvas8.gameObject.SetActive(true);
-    }
-    public void Canva8Button1()
-    {
-        Debug.Log("Wrong");
-        canvas8.gameObject.SetActive(false);
-        canvas9.gameObject.SetActive(true);
-    }
-
-    public void Canva8Button2()
-    {
-        Debug.Log("Wrong");
-        canvas8.gameObject.SetActive(false);
-        canvas9.gameObject.SetActive(true);
-    }
-
-    public void Canva8Button3()
-    {
-        Debug.Log("Wrong");
-        canvas8.gameObject.SetActive(false);
-        canvas9.gameObject.SetActive(true);
-    }
-    
-    public void Canva8Button4()
-    {
-        Debug.Log("Correct");
-        canvas8.gameObject.SetActive(false);
-        canvas9.gameObject.SetActive(true);
-    }
-
-    public void Canva9Button1()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva9Button2()
-    {
-        Debug.Log("Correct");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva9Button3()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva9Button4()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva10Button1()
-    {
-        Debug.Log("Wrong");
-        canvas10.gameObject.SetActive(false);
-        canvas11.gameObject.SetActive(true);
-    }
-
-    public void Canva10Button2()
-    {
-        Debug.Log("Wrong");
-        canvas10.gameObject.SetActive(false);
-        canvas11.gameObject.SetActive(true);
-    }
-
-    public void Canva10Button3()
-    {
-        Debug.Log("Wrong");
-        canvas10.gameObject.SetActive(false);
-        canvas11.gameObject.SetActive(true);
-    }
-
-    public void Canva10Button4()
-    {
-        Debug.Log("Correct");
-        canvas10.gameObject.SetActive(false);
-        canvas11.gameObject.SetActive(true);
-    }
-
-    public void Canva11Button1()
-    {
-        Debug.Log("Correct");
-        canvas11.gameObject.SetActive(false);
-        canvas12.gameObject.SetActive(true);
-    }
-
-    public void Canva11Button2()
-    {
-        Debug.Log("Wrong");
-        canvas11.gameObject.SetActive(false);
-        canvas12.gameObject.SetActive(true);
-    }
-
-    public void Canva11Button3()
-    {
-        Debug.Log("Wrong");
-        canvas11.gameObject.SetActive(false);
-        canvas12.gameObject.SetActive(true);
-    }
-
-    public void Canva11Button4()
-    {
-        Debug.Log("Wrong");
-        canvas11.gameObject.SetActive(false);
-        canvas12.gameObject.SetActive(true);
-    }
-
-    public void Canva12Button1()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva12Button2()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva12Button3()
-    {
-        Debug.Log("Wrong");
-        //finish mini game & deactivate canvas
-    }
-
-    public void Canva12Button4()
-    {
-        Debug.Log("Correct");
-        //finish mini game & deactivate canvas
+        answerButtons[randomIndex].gameObject.SetActive(false);
+        answerButtons[randomIndex2].gameObject.SetActive(false);
     }
 }
-
-
-
-
-
-
-
