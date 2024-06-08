@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,29 +7,28 @@ using UnityEngine.SceneManagement;
 public class BlockPuzzleScript : MonoBehaviour
 {
     [SerializeField] private Transform emptySpace = null;
-    private Camera _camera;
+    public Camera _camera;
     [SerializeField] private BlocksScript[] tiles;
     private int emptySpaceIndex = 11;
-    private bool _isFinished;
+    [NonSerialized] public bool _isFinished = false;
     [SerializeField] private GameObject endPanel;
-    
-    void Start()
-    {
-        _camera = Camera.main;
 
-        Shuffle();
+    ProductManagementManager productManagementManager;
+
+    private void Start()
+    {
+        productManagementManager = GetComponent<ProductManagementManager>();
     }
 
-    
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !_isFinished)
         {
             Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
             if (hit)
             {
-                if (Vector2.Distance(emptySpace.position, hit.transform.position) < 3)
+                if (Vector2.Distance(emptySpace.position, hit.transform.position) < 3.5)
                 {
                     Vector2 lastEmptySpacePosition = emptySpace.position;
                     BlocksScript thisBlock = hit.transform.GetComponent<BlocksScript>();
@@ -55,15 +55,24 @@ public class BlockPuzzleScript : MonoBehaviour
             if (correctBlocks == tiles.Length - 1)
             {
                 _isFinished = true;
-                endPanel.SetActive(true);
-                StartCoroutine(WaitforEnd());
+                Debug.Log("finished");
+                StartCoroutine(SignalNextRound());
             }
         }
     }
 
     public void Shuffle()
     {
-        if(emptySpaceIndex != 11)
+        foreach (var a in tiles)
+        {
+            if (a != null)
+            {
+                a.wasInRightPlace = false;
+                a.hasMoved = false;
+            }
+        }
+
+        if (emptySpaceIndex != 11)
         {
             var tileOn11LastPos = tiles[11].targetPosition;
             tiles[11].targetPosition = emptySpace.position;
@@ -79,7 +88,7 @@ public class BlockPuzzleScript : MonoBehaviour
             {
 
                 var lastPos = tiles[i].targetPosition;
-                int randomIndex = Random.Range(0, 10);
+                int randomIndex = UnityEngine.Random.Range(0, 10);
                 tiles[i].targetPosition = tiles[randomIndex].targetPosition;
                 tiles[randomIndex].targetPosition = lastPos;
                 var tile = tiles[i];
@@ -90,6 +99,8 @@ public class BlockPuzzleScript : MonoBehaviour
             invertion = GetInversions();
             Debug.Log("");
         } while (invertion%2 != 0);
+
+        StartCoroutine(ToggleIsFinished());
     }
     public int findIndex(BlocksScript ts)
     {
@@ -122,10 +133,18 @@ public class BlockPuzzleScript : MonoBehaviour
         }
         return inversionsSum;
     }
-    IEnumerator WaitforEnd()
-    {
-        yield return new WaitForSeconds(5);
 
-        SceneManager.LoadScene("MainScene");
+    IEnumerator SignalNextRound()
+    {
+        yield return new WaitForSeconds(2f);
+
+        productManagementManager.NextRound();
+    }
+
+    private IEnumerator ToggleIsFinished()
+    {
+       yield return new WaitForSeconds(0.5f);
+
+        _isFinished = false;
     }
 }

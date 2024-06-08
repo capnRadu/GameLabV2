@@ -28,11 +28,12 @@ public class PlayersManager : NetworkBehaviour
     public TextMeshProUGUI financeTotalVotesText;
     public TextMeshProUGUI qaTotalVotesText;
     public TextMeshProUGUI programmingTotalVotesText;
+    public TextMeshProUGUI productManagementTotalVotesText;
 
     public GameObject financeMinigameCanvas;
     public GameObject qaMinigameCanvas;
     public GameObject programmingMinigameCanvas;
-    private int currentMinigameIndex = -1;
+    public GameObject productManagementMinigameObject;
 
     public GameObject leaderboardPanel;
     public GameObject playerPanelPrefab;
@@ -166,7 +167,7 @@ public class PlayersManager : NetworkBehaviour
 
                 playerPanel.transform.Find("Ranking Text").GetComponent<TextMeshProUGUI>().text = $"{ranking}) {player.playerName} : {player.totalPoints} final points";
                 playerPanel.transform.Find("Minigames Points Text").GetComponent<TextMeshProUGUI>().text = $"Minigames points (50%): {player.minigamesPoints}";
-                playerPanel.transform.Find("Attribute Points Text").GetComponent<TextMeshProUGUI>().text = $"Total attribute points (50%): {player.nonPrimaryAttributePoints}";
+                playerPanel.transform.Find("Attribute Points Text").GetComponent<TextMeshProUGUI>().text = $"Total non-primary attribute points (50%): {player.nonPrimaryAttributePoints}";
 
                 posY -= spacing;
             }
@@ -265,7 +266,7 @@ public class PlayersManager : NetworkBehaviour
             }
         }
 
-        if (minigamesManager.financeVotes + minigamesManager.qaVotes + minigamesManager.programmingVotes != players.Length && !invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted)
+        if (minigamesManager.financeVotes + minigamesManager.qaVotes + minigamesManager.programmingVotes + minigamesManager.productManagementVotes != players.Length && !invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted)
         {
             switch (minigame)
             {
@@ -284,12 +285,17 @@ public class PlayersManager : NetworkBehaviour
                     programmingTotalVotesText.text = $"Vote ({minigamesManager.programmingVotes} votes)";
                     Debug.Log(invokingPlayer.GetComponent<PlayerSkills>().playerName + " voted for Programming minigame");
                     break;
+                case "product management":
+                    minigamesManager.productManagementVotes++;
+                    productManagementTotalVotesText.text = $"Vote ({minigamesManager.productManagementVotes} votes)";
+                    Debug.Log(invokingPlayer.GetComponent<PlayerSkills>().playerName + " voted for Product Management minigame");
+                    break;
             }
 
             invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted = true;
         }
 
-        if (minigamesManager.financeVotes + minigamesManager.qaVotes + minigamesManager.programmingVotes == players.Length && invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted)
+        if (minigamesManager.financeVotes + minigamesManager.qaVotes + minigamesManager.programmingVotes + minigamesManager.productManagementVotes == players.Length && invokingPlayer.GetComponent<PlayerInputAdvanced>().hasVoted)
         {
             foreach (GameObject player in players)
             {
@@ -303,7 +309,7 @@ public class PlayersManager : NetworkBehaviour
 
     private int DetermineMinigameIndex()
     {
-        int[] votes = { minigamesManager.financeVotes, minigamesManager.qaVotes, minigamesManager.programmingVotes };
+        int[] votes = { minigamesManager.financeVotes, minigamesManager.qaVotes, minigamesManager.programmingVotes, minigamesManager.productManagementVotes };
         int maxVotes = votes.Max();
 
         List<int> indicesWithMaxVotes = new List<int>();
@@ -338,6 +344,9 @@ public class PlayersManager : NetworkBehaviour
             case 2:
                 StartCoroutine(StartMinigame(programmingMinigameCanvas));
                 break;
+            case 3:
+                StartCoroutine(StartMinigame(productManagementMinigameObject));
+                break;
         }
     }
 
@@ -350,10 +359,12 @@ public class PlayersManager : NetworkBehaviour
         financeTotalVotesText.text = "Vote (0 votes)";
         qaTotalVotesText.text = "Vote (0 votes)";
         programmingTotalVotesText.text = "Vote (0 votes)";
+        productManagementTotalVotesText.text = "Vote (0 votes)";
 
         minigamesManager.financeVotes = 0;
         minigamesManager.qaVotes = 0;
         minigamesManager.programmingVotes = 0;
+        minigamesManager.productManagementVotes = 0;
 
         minigameVotingPanel.SetActive(false);
     }

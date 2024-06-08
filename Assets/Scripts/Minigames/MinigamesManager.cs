@@ -13,6 +13,7 @@ public class MinigamesManager : NetworkBehaviour
     public int financeVotes = 0;
     public int qaVotes = 0;
     public int programmingVotes = 0;
+    public int productManagementVotes = 0;
 
     private void Start()
     {
