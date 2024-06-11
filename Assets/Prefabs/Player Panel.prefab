@@ -335,7 +335,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Total non-primary attribute points (50%): 50'
+  m_text: 'Total attribute points (50%): 50'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e7484bab9068434991ff3dc9cfc438a, type: 2}
   m_sharedMaterial: {fileID: -2533952578982450111, guid: 1e7484bab9068434991ff3dc9cfc438a,
@@ -363,7 +363,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.55
+  m_fontSize: 25
   m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 1
