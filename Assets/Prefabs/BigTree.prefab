@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &770466256051512559
 Transform:
@@ -119,7 +119,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3594353810283752687
 Transform:
@@ -154,6 +154,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: bush2_city_oldenburg (48)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3446143818417283506, guid: 6ffccbb489afe3a4b9371c8d1df896ff,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4171063601775971955, guid: 6ffccbb489afe3a4b9371c8d1df896ff,
         type: 3}
@@ -318,6 +323,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: bush2_city_oldenburg (47)
       objectReference: {fileID: 0}
+    - target: {fileID: 3446143818417283506, guid: 6ffccbb489afe3a4b9371c8d1df896ff,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4171063601775971955, guid: 6ffccbb489afe3a4b9371c8d1df896ff,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -392,6 +402,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: bush2_city_oldenburg (49)
       objectReference: {fileID: 0}
+    - target: {fileID: 3446143818417283506, guid: 6ffccbb489afe3a4b9371c8d1df896ff,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4171063601775971955, guid: 6ffccbb489afe3a4b9371c8d1df896ff,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -465,6 +480,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: bush2_city_oldenburg (46)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3446143818417283506, guid: 6ffccbb489afe3a4b9371c8d1df896ff,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4171063601775971955, guid: 6ffccbb489afe3a4b9371c8d1df896ff,
         type: 3}
